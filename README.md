@@ -1,2 +1,2 @@
 # labs-ingressos
-Sistema de venda e troca de ingressos
+Sistema de venda de ingressos
