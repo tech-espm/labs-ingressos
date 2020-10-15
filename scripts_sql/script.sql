@@ -9,7 +9,7 @@ CREATE TABLE perfil (
   UNIQUE KEY perfil_nome_UN (nome)
 );
 
-INSERT INTO perfil (nome) VALUES ('ADMINISTRADOR'), ('COMUM');
+INSERT INTO perfil (nome) VALUES ('Administrador'), ('Comum');
 
 -- DROP TABLE IF EXISTS termouso;
 CREATE TABLE termouso (
@@ -28,18 +28,18 @@ CREATE TABLE usuario (
   idperfil int NOT NULL,
   senha varchar(100) NOT NULL,
   token char(32) DEFAULT NULL,
-  criacao datetime NOT NULL,
   idtermouso int NOT NULL,
   nascimento datetime NOT NULL,
   telefone varchar(30) NOT NULL,
   faculdade varchar(50) NOT NULL,
+  criacao datetime NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY usuario_login_UN (login),
   KEY usuario_idperfil_FK_idx (idperfil),
   CONSTRAINT usuario_idperfil_FK FOREIGN KEY (idperfil) REFERENCES perfil (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO usuario (login, nome, idperfil, senha, token, criacao, idtermouso, nascimento, telefone, faculdade) VALUES ('ADMIN', 'ADMINISTRADOR', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW(), 0, '2000-01-01', '', '');
+INSERT INTO usuario (login, nome, idperfil, senha, token, criacao, idtermouso, nascimento, telefone, faculdade) VALUES ('admin', 'Administrador', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW(), 0, '2000-01-01', '', '');
 
 -- DROP TABLE IF EXISTS tipo;
 CREATE TABLE tipo (
@@ -55,7 +55,8 @@ CREATE TABLE notificacao (
   idtipo int NOT NULL,
   idusuarioorigem int NOT NULL,
   idusuariodestino int NOT NULL,
-  flagvisto tinyint(4) NOT NULL,
+  flagvista tinyint(4) NOT NULL,
+  criacao datetime NOT NULL,
   PRIMARY KEY (id),
   KEY notificacao_idtipo_FK_idx (idtipo),
   KEY notificacao_idusuarioorigem_FK_idx (idusuarioorigem),

@@ -6,6 +6,8 @@ import Sql = require("../infra/sql");
 import GeradorHash = require("../utils/geradorHash");
 import appsettings = require("../appsettings");
 import intToHex = require("../utils/intToHex");
+import converterDataISO = require("../utils/converterDataISO");
+import emailValido = require("../utils/emailValido");
 
 export = class Usuario {
 
@@ -17,6 +19,10 @@ export = class Usuario {
 	public nome: string;
 	public idperfil: number;
 	public senha: string;
+	public idtermouso: number;
+	public nascimento: string;
+	public telefone: string;
+	public faculdade: string;
 	public criacao: string;
 
 	// Utilizados apenas através do cookie
@@ -86,7 +92,7 @@ export = class Usuario {
 		let u: Usuario = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			login = login.normalize().trim().toUpperCase();
+			login = login.normalize().trim().toLowerCase();
 
 			let rows = await sql.query("select id, nome, idperfil, senha from usuario where login = ?", [login]);
 			let row;
@@ -123,7 +129,7 @@ export = class Usuario {
 	}
 
 	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string): Promise<string> {
-		nome = (nome || "").normalize().trim().toUpperCase();
+		nome = (nome || "").normalize().trim();
 		if (nome.length < 3 || nome.length > 100)
 			return "Nome inválido";
 
@@ -160,9 +166,21 @@ export = class Usuario {
 	}
 
 	private static validar(u: Usuario): string {
-		u.nome = (u.nome || "").normalize().trim().toUpperCase();
+		u.nome = (u.nome || "").normalize().trim();
 		if (u.nome.length < 3 || u.nome.length > 100)
 			return "Nome inválido";
+		
+		u.nascimento = converterDataISO(u.nascimento);
+		if (!u.nascimento)
+			return "Data de nascimento inválida";
+
+		u.telefone = (u.telefone || "").normalize().trim();
+		if (u.telefone.length < 3 || u.telefone.length > 30)
+			return "Telefone inválido";
+
+		u.faculdade = (u.faculdade || "").normalize().trim();
+		if (u.faculdade.length < 3 || u.faculdade.length > 50)
+			return "Faculdade inválida";
 
 		return null;
 	}
@@ -171,7 +189,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
+			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
 		});
 
 		return (lista || []);
@@ -181,7 +199,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select id, login, nome, idperfil, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
+			lista = await sql.query("select id, login, nome, idperfil, idtermouso, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
 		});
 
 		return ((lista && lista[0]) || null);
@@ -192,13 +210,13 @@ export = class Usuario {
 		if ((res = Usuario.validar(u)))
 			return res;
 
-		u.login = (u.login || "").normalize().trim().toUpperCase();
-		if (u.login.length < 3 || u.login.length > 100)
+		u.login = (u.login || "").normalize().trim().toLowerCase();
+		if (u.login.length < 3 || u.login.length > 100 || !emailValido(u.login))
 			return "Login inválido";
 
 		await Sql.conectar(async (sql: Sql) => {
 			try {
-				await sql.query("insert into usuario (login, nome, idperfil, senha, criacao) values (?, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, appsettings.usuarioHashSenhaPadrao]);
+				await sql.query("insert into usuario (login, nome, idperfil, senha, idtermouso, nascimento, telefone, faculdade, criacao) values (?, ?, ?, ?, 0, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, appsettings.usuarioHashSenhaPadrao, u.nascimento, u.telefone, u.faculdade]);
 			} catch (e) {
 				if (e.code) {
 					switch (e.code) {
@@ -230,7 +248,7 @@ export = class Usuario {
 			return "Não é possível editar o usuário administrador principal";
 
 		await Sql.conectar(async (sql: Sql) => {
-			await sql.query("update usuario set nome = ?, idperfil = ? where id = ?", [u.nome, u.idperfil, u.id]);
+			await sql.query("update usuario set nome = ?, idperfil = ?, nascimento = ?, telefone = ?, faculdade = ? where id = ?", [u.nome, u.idperfil, u.nascimento, u.telefone, u.faculdade, u.id]);
 			res = sql.linhasAfetadas.toString();
 		});
 
