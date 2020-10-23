@@ -29,14 +29,14 @@ export = class evento {
 
 		return lista || [];
 	}
-    //S/n
+    //S
 	public static async obter(nome: string): Promise<evento> {
 		let lista: evento[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = (await sql.query("select nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude from evento") as evento[];
+			lista = (await sql.query("select id, nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude from evento where nome like '%?%'", [nome])) as evento[];
 		});
-
+		
 		return (lista && lista[0]) || null;
 	}
     //S
