@@ -6,6 +6,9 @@ export = class Assunto {
 	public criacao: string;
 
 	private static validar(a: Assunto): string {
+		if (!a)
+			return "Assunto inválido";
+
 		a.nome = (a.nome || "").normalize().trim();
 		if (a.nome.length < 3 || a.nome.length > 100)
 			return "Nome inválido";

@@ -1,12 +1,12 @@
 import Sql = require("../infra/sql");
 
-export = class pedido{
+export = class Pedido {
     public id: number;
     public idusuario: number;
     public idstatus: number;
     public data: string;
     public valortotal: number;
-
+/*
  //N
     private static validar(p: pedido): string {
         p.nome = (p.nome || "").normalize().trim();
@@ -66,6 +66,5 @@ public static async excluir(id: number): Promise<string> {
 
     return res;
 } 
+*/
 }
-
-

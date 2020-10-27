@@ -45,7 +45,8 @@ INSERT INTO usuario (login, nome, idperfil, senha, token, criacao, idtermouso, n
 CREATE TABLE tipo (
   id int NOT NULL AUTO_INCREMENT,
   nome varchar(40) NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE KEY tipo_nome_UN (nome),
 );
 
 -- DROP TABLE IF EXISTS notificacao;
@@ -73,7 +74,7 @@ CREATE TABLE evento (
   datainicial datetime NOT NULL,
   datafinal datetime NOT NULL,
   horario varchar(40) NOT NULL,
-  descricao varchar(100) NOT NULL,
+  descricao text NOT NULL,
   endereco varchar(100) NOT NULL,
   latitude float NOT NULL,
   longitude float NOT NULL,
@@ -98,38 +99,17 @@ CREATE TABLE ingresso (
   id bigint NOT NULL AUTO_INCREMENT,
   tipo varchar(50) NOT NULL,
   valor float NOT NULL,
+  idevento int NOT NULL,
   idusuario int NOT NULL,
   idpedido bigint NOT NULL,
   emaildestino varchar(100) NULL,
   emailenviado tinyint(4) NOT NULL,
   emailrecebido tinyint(4) NOT NULL,
   PRIMARY KEY (id),
+  KEY ingresso_idevento_FK_idx (idevento),
   KEY ingresso_idusuario_FK_idx (idusuario),
   KEY ingresso_idpedido_FK_idx (idpedido),
-  CONSTRAINT ingresso_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT ingresso_idpedido_FK FOREIGN KEY (idpedido) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE RESTRICT
-);
-
--- DROP TABLE IF EXISTS evento_ingresso;
-CREATE TABLE evento_ingresso (
-  id bigint NOT NULL AUTO_INCREMENT,
-  idevento int NOT NULL,
-  idingresso bigint NOT NULL,
-  PRIMARY KEY (id),
-  KEY evento_ingresso_idevento_FK_idx (idevento, idingresso),
-  KEY evento_ingresso_idingresso_FK_idx (idingresso),
-  CONSTRAINT evento_ingresso_idevento_FK FOREIGN KEY (idevento) REFERENCES evento (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT evento_ingresso_idingresso_FK FOREIGN KEY (idingresso) REFERENCES ingresso (id) ON DELETE CASCADE ON UPDATE RESTRICT
-);
-
--- DROP TABLE IF EXISTS pedido_ingresso;
-CREATE TABLE pedido_ingresso (
-  id bigint NOT NULL AUTO_INCREMENT,
-  idpedido bigint NOT NULL,
-  idingresso bigint NOT NULL,
-  PRIMARY KEY (id),
-  KEY pedido_ingresso_idpedido_FK_idx (idpedido, idingresso),
-  KEY pedido_ingresso_idingresso_FK_idx (idingresso),
-  CONSTRAINT pedido_ingresso_idpedido_FK FOREIGN KEY (idpedido) REFERENCES pedido (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT pedido_ingresso_idingresso_FK FOREIGN KEY (idingresso) REFERENCES ingresso (id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT ingresso_idevento_FK FOREIGN KEY (idevento) REFERENCES evento (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT ingresso_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT ingresso_idpedido_FK FOREIGN KEY (idpedido) REFERENCES pedido (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );

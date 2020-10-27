@@ -5,6 +5,9 @@ export = class Perfil {
 	public nome: string;
 
 	private static validar(p: Perfil): string {
+		if (!p)
+			return "Perfil inválido";
+
 		p.nome = (p.nome || "").normalize().trim();
 		if (p.nome.length < 3 || p.nome.length > 50)
 			return "Nome inválido";
