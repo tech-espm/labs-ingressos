@@ -20,34 +20,36 @@ export = class Notificacao {
 	}
 
 	public static async criar(n: Notificacao): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("insert into notificacao (descricao, idtipo, idusuarioorigem, idusuariodestino, flagvista, criacao) values (?, ?, ?, ?, 0, now())", [n.descricao, n.idtipo, n.idusuarioorigem, n.idusuariodestino]);
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async marcarVista(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("update notificacao set flagvista = 1 where id = ?", [id]);
-			res = sql.linhasAfetadas.toString();
+			if (!sql.linhasAfetadas)
+				erro = "Notificação não encontrada"
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from notificacao where id = ?", [id]);
-			res = sql.linhasAfetadas.toString();
+			if (!sql.linhasAfetadas)
+				erro = "Notificação não encontrada"
 		});
 
-		return res;
+		return erro;
 	}
 };

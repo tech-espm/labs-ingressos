@@ -36,52 +36,54 @@ export = class Perfil {
 	}
 
 	public static async criar(p: Perfil): Promise<string> {
-		let res: string;
-		if ((res = Perfil.validar(p)))
-			return res;
+		let erro: string;
+		if ((erro = Perfil.validar(p)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			try {
 				await sql.query("insert into perfil (nome) values (?)", [p.nome]);
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
-					res = `O perfil ${p.nome} já existe`;
+				erro = `O perfil ${p.nome} já existe`;
 				else
 					throw e;
 			}
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async alterar(p: Perfil): Promise<string> {
-		let res: string;
-		if ((res = Perfil.validar(p)))
-			return res;
+		let erro: string;
+		if ((erro = Perfil.validar(p)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			try {
 				await sql.query("update perfil set nome = ? where id = ?", [p.nome, p.id]);
-				res = sql.linhasAfetadas.toString();
+				if (!sql.linhasAfetadas)
+					erro = "Perfil não encontrado";
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
-					res = `O perfil ${p.nome} já existe`;
+					erro = `O perfil ${p.nome} já existe`;
 				else
 					throw e;
 			}
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from perfil where id = ?", [id]);
-			res = sql.linhasAfetadas.toString();
+			if (!sql.linhasAfetadas)
+				erro = "Perfil não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 };

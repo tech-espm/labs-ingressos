@@ -5,19 +5,33 @@ import Notificacao = require("../../models/notificacao");
 
 const router = express.Router();
 
-router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
+router.get("/listarDeUsuario/:idusuariodestino", wrap(async (req: express.Request, res: express.Response) => {
     let erro: string = null;
 
-    let notificacao = req.body as Notificacao;
+    let id = parseInt(req.params["idusuariodestino"]);
 
-    erro = await Notificacao.criar(notificacao);
+    if(isNaN(id)){
+        res.status(400).json("Id inválido");
+    } else{
+        res.json(await Notificacao.listarDeUsuario(id));
+    }
+}));
 
+router.get("/marcarVista/:id", wrap(async (req: express.Request, res: express.Response) => {
+    let erro: string = null;
+
+    let id = parseInt(req.params["id"]);
+
+    if(isNaN(id)){
+        erro = "Id inválido";
+    } else{
+        erro = await Notificacao.marcarVista(id);
+    }
     if(erro){
         res.status(400).json(erro);
     }else{
         res.json(true);
     }
-
 }));
 
 router.get("/excluir/:id", wrap(async (req: express.Request, res: express.Response) => {

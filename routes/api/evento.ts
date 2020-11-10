@@ -11,6 +11,12 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
     res.json(lista);
 }));
 
+router.get("/listarBusca", wrap(async (req: express.Request, res: express.Response) => {
+    let lista = await Evento.listarBusca(req.query["nome"] as string, req.query["data"] as string);
+
+    res.json(lista);
+}));
+
 router.get("/obter/:id", wrap(async (req: express.Request, res: express.Response) => {
     let erro: string = null;
 
@@ -18,19 +24,19 @@ router.get("/obter/:id", wrap(async (req: express.Request, res: express.Response
 
     let evento: Evento = null;
 
-    if(isNaN(id)){
+    if (isNaN(id)) {
         erro = "Id inválido";
-    } else{
+    } else {
         evento = await Evento.obter(id);
 
-        if(!evento){
+        if (!evento) {
             erro = "Evento não encontrado!";
         }
     }
 
-    if(erro){
+    if (erro) {
         res.status(400).json(erro);
-    }else{
+    } else {
         res.json(evento);
     }
 

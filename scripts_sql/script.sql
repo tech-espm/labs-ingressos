@@ -46,7 +46,7 @@ CREATE TABLE tipo (
   id int NOT NULL AUTO_INCREMENT,
   nome varchar(40) NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY tipo_nome_UN (nome),
+  UNIQUE KEY tipo_nome_UN (nome)
 );
 
 -- DROP TABLE IF EXISTS notificacao;
@@ -78,7 +78,8 @@ CREATE TABLE evento (
   endereco varchar(100) NOT NULL,
   latitude float NOT NULL,
   longitude float NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FULLTEXT (nome)
 );
 
 -- DROP TABLE IF EXISTS pedido;
@@ -106,10 +107,9 @@ CREATE TABLE ingresso (
   emailenviado tinyint(4) NOT NULL,
   emailrecebido tinyint(4) NOT NULL,
   PRIMARY KEY (id),
-  KEY ingresso_idevento_FK_idx (idevento),
+  KEY ingresso_idevento_idevento_FK_idx (idevento, idpedido),
   KEY ingresso_idusuario_FK_idx (idusuario),
   KEY ingresso_idpedido_FK_idx (idpedido),
   CONSTRAINT ingresso_idevento_FK FOREIGN KEY (idevento) REFERENCES evento (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT ingresso_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT ingresso_idpedido_FK FOREIGN KEY (idpedido) REFERENCES pedido (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT ingresso_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );

@@ -61,6 +61,46 @@ export = class Evento {
 		return lista || [];
 	}
 
+	public static async listarBusca(nome: string, data: string): Promise<Evento[]> {
+		let lista: Evento[] = null;
+
+		await Sql.conectar(async (sql: Sql) => {
+			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html
+			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-natural-language.html
+
+			let query = "select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento ";
+			let parametros: string[] = [];
+			let temWhere = false;
+
+			if (nome) {
+				if (!temWhere) {
+					query += " where ";
+					temWhere = true;
+				} else {
+					query += " and ";
+				}
+				query += " match (nome) against (? in natural language mode) ";
+				parametros.push(nome);
+			}
+
+			data = converterDataISO(data);
+			if (data) {
+				if (!temWhere) {
+					query += " where ";
+					temWhere = true;
+				} else {
+					query += " and ";
+				}
+				query += " dataInicial <= ? and dataFinal >= ? ";
+				parametros.push(data, data);
+			}
+
+			lista = (await sql.query(query, parametros)) as Evento[];
+		});
+
+		return lista || [];
+	}
+
 	public static async obter(id: number): Promise<Evento> {
 		let lista: Evento[] = null;
 
@@ -72,37 +112,41 @@ export = class Evento {
 	}
 
 	public static async criar(e: Evento): Promise<string> {
-		let res: string;
-		if ((res = Evento.validar(e)))
-			return res;
+		let erro: string;
+		if ((erro = Evento.validar(e)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude) values (?,?,?,?,?,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async alterar(e: Evento): Promise<string> {
-		let res: string;
-		if ((res = Evento.validar(e)))
-			return res;
+		let erro: string;
+		if ((erro = Evento.validar(e)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("update evento set endereco = ?, longitude = ?, latitude = ?, horario = ?, nome = ?, datainicial = ?, datafinal = ?, descricao = ? where id = ?", [e.endereco, e.longitude, e.latitude, e.horario, e.nome, e.datafinal, e.datafinal, e.descricao, e.id]);
+			if (!sql.linhasAfetadas)
+				erro = "Evento não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from evento where id = ?", [id]);
+			if (!sql.linhasAfetadas)
+				erro = "Evento não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 
 };

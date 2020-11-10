@@ -24,15 +24,15 @@ export = class Ingresso {
 		if (isNaN(i.valor) || i.valor < 0)
 			return "Valor inválido";
 
-		i.idevento = parseFloat(i.idevento as any);
+		i.idevento = parseInt(i.idevento as any);
 		if (isNaN(i.idevento))
 			return "Evento inválido";
 
-		i.idusuario = parseFloat(i.idusuario as any);
+		i.idusuario = parseInt(i.idusuario as any);
 		if (isNaN(i.idusuario))
 			return "Usuário inválido";
 
-		i.idpedido = parseFloat(i.idpedido as any);
+		i.idpedido = parseInt(i.idpedido as any);
 		if (isNaN(i.idpedido))
 			return "Pedido inválido";
 
@@ -53,37 +53,51 @@ export = class Ingresso {
 		return lista || [];
     }
 
+	public static async listarDeEvento(idevento: number): Promise<Ingresso[]> {
+		let lista: Ingresso[] = null;
+
+		await Sql.conectar(async (sql: Sql) => {
+			lista = (await sql.query("select tipo, valor, idevento from ingresso where idevento = ? and idpedido = 0", [idevento])) as Ingresso[];
+		});
+
+		return lista || [];
+    }
+
 	public static async criar(i: Ingresso): Promise<string> {
-		let res: string;
-		if ((res = Ingresso.validar(i)))
-			return res;
+		let erro: string;
+		if ((erro = Ingresso.validar(i)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("insert into ingresso (tipo, valor, idevento, idusuario, idpedido, emaildestino, emailenviado, emailrecebido) values (?, ?, ?, ?, ?, ?, 0, 0)" [i.tipo, i.valor, i.idevento, i.idusuario, i.idpedido, i.emaildestino]);
 		});
 
-		return res;
+		return erro;
     }
 
 	public static async alterar(i: Ingresso): Promise<string> {
-		let res: string;
-		if ((res = Ingresso.validar(i)))
-			return res;
+		let erro: string;
+		if ((erro = Ingresso.validar(i)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("update ingresso set tipo = ?, valor = ? where id = ?" [i.tipo, i.valor, i.id]);
+			if (!sql.linhasAfetadas)
+				erro = "Ingresso não encontrado";
 		});
 
-		return res;
+		return erro;
     }
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from ingresso where id = ?", [id]);
+			if (!sql.linhasAfetadas)
+				erro = "Ingresso não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 };

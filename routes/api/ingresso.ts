@@ -11,6 +11,12 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
     res.json(lista);
 }));
 
+router.get("/listarDeEvento/:idevento", wrap(async (req: express.Request, res: express.Response) => {
+    let lista = await Ingresso.listarDeEvento(parseInt(req.params["idevento"]));
+
+    res.json(lista);
+}));
+
 router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
     let erro: string = null;
 

@@ -243,19 +243,20 @@ export = class Usuario {
 	}
 
 	public static async alterar(u: Usuario): Promise<string> {
-		let res: string;
-		if ((res = Usuario.validar(u)))
-			return res;
+		let erro: string;
+		if ((erro = Usuario.validar(u)))
+			return erro;
 
 		if (u.id === Usuario.IdAdmin)
 			return "Não é possível editar o usuário administrador principal";
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("update usuario set nome = ?, idperfil = ?, nascimento = ?, telefone = ?, faculdade = ? where id = ?", [u.nome, u.idperfil, u.nascimento, u.telefone, u.faculdade, u.id]);
-			res = sql.linhasAfetadas.toString();
+			if (!sql.linhasAfetadas)
+				erro = "Usuário não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {

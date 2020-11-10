@@ -17,37 +17,41 @@ export = class Termouso {
 	}
 
 	public static async criar(tu: Termouso): Promise<string> {
-		let res: string;
-		if ((res = Termouso.validar(tu)))
-			return res;
+		let erro: string;
+		if ((erro = Termouso.validar(tu)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("insert into termouso (descricao) values (?)", [tu.descricao]);
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async alterar(tu: Termouso): Promise<string> {
-		let res: string;
-		if ((res = Termouso.validar(tu)))
-			return res;
+		let erro: string;
+		if ((erro = Termouso.validar(tu)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("update termouso set descricao = ? where id = ?", [tu.descricao, tu.id]);
+			if (!sql.linhasAfetadas)
+				erro = "Perfil não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from evento where id = ?", [id]);
+			if (!sql.linhasAfetadas)
+				erro = "Perfil não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 
 };

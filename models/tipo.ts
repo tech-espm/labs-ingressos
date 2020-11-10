@@ -55,33 +55,35 @@ export = class Tipo {
 	}
 
 	public static async alterar(t: Tipo): Promise<string> {
-		let res: string;
-		if ((res = Tipo.validar(t)))
-			return res;
+		let erro: string;
+		if ((erro = Tipo.validar(t)))
+			return erro;
 
 		await Sql.conectar(async (sql: Sql) => {
 			try {
 				await sql.query("update tipo set nome = ? where id = ?", [t.nome, t.id]);
-				res = sql.linhasAfetadas.toString();
+				if (!sql.linhasAfetadas)
+					erro = "Tipo não encontrado";
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
-					res = `O tipo ${t.nome} já existe`;
+					erro = `O tipo ${t.nome} já existe`;
 				else
 					throw e;
 			}
 		});
 
-		return res;
+		return erro;
 	}
 
 	public static async excluir(id: number): Promise<string> {
-		let res: string = null;
+		let erro: string = null;
 
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from tipo where id = ?", [id]);
-			res = sql.linhasAfetadas.toString();
+			if (!sql.linhasAfetadas)
+				erro = "Tipo não encontrado";
 		});
 
-		return res;
+		return erro;
 	}
 };
