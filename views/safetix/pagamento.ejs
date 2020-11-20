@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--  jQuery -->
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+        <!-- Bootstrap 3 -->
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet">
+
+        <title>Título da Página</title>
+
+        <style type="text/css">
+			body{
+				color: #ff0949;	
+				font-family: Prompt;
+			}
+			.limitador {
+				padding-top:10%;
+				padding-bottom:10%;
+				max-width: 800px;
+				margin: 0px auto;
+			}
+			.caixa {
+				display: inline-block;
+			}
+		</style>
+		<!-- Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) -->
+	</head>
+	<body>
+		<img src="images/logo.png" height="50px" width="360px"/>
+		<form>
+			<div class="container-fluid limitador">
+				<div class="row">
+					<div class="col-sm-6">
+						<h3> Endereço de cobrança </h3>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="País">País</label>
+									<input id="País" class="form-control" type="text" />
+								</div>
+							</div>
+							
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="Estado"> Estado </label>
+									<input id="Estado" class="form-control" type="text" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="Cidade"> Cidade </label>
+							<input id="Cidade" class="form-control" type="text" />
+						</div>
+						
+						<div class="form-group">
+							<label for="Bairro"> Bairro </label>
+							<input id="Bairro" class="form-control" type="text" />
+						</div>
+						
+						<div class="form-group">
+							<label for="Rua"> Rua </label>
+							<input id="Rua" class="form-control" type="text" />
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="Número"> Número </label>
+									<input id="Número" class="form-control" type="text" />
+								</div>
+							</div>
+							
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="Complemento"> Complemento </label>
+									<input id="Complemento" class="form-control" type="text" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="CEP"> CEP </label>
+									<input id="CEP" class="form-control" type="text" />
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-6">
+						<h3> Forma de pagamento </h3>
+						
+						<div class="form-group">
+							<label for="Número do cartão"> Número do cartão </label>
+							<input id="Número do cartão" class="form-control" type="text" />
+						</div>
+						
+						<div class="form-group">
+							<label>Selecione a bandeira </label>
+							<br />
+							<div class="caixa checkbox">
+								<label>
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+							<div class="caixa checkbox">
+								<label>
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+							<div class="caixa checkbox">
+								<label>
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+							<div class="caixa checkbox">
+								<label>
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+							<div class="caixa checkbox">
+								<label>
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+							<div class="caixa checkbox">
+								<label> 
+								<input id="Selecione a bandeira" type="radio" name="bandeira" /> 
+								</label>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="Validade"> Validade </label>
+									<input id="Validade" class="form-control" type="text" />
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="CVV"> CVV </label>
+									<input id="CVV" class="form-control" type="text" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="Nome do cartão"> Nome do cartão </label>
+							<input id="Nome do cartão" class="form-control" type="text" />
+						</div>
+						
+						<div class="form-group">
+							<label for="CPF do titular do cartão"> CPF do titular do cartão </label>
+							<input id="CPF do titular do cartão" class="form-control" type="text" />
+						</div>
+						
+						<div class="form-group text-right">
+							<label>&nbsp;</label>
+							<div class="checkbox">
+								<label>
+								<input id="Salvar cartão para compras futuras" type="checkbox" /> Salvar cartão para compras futuras
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="text-right">
+					<a href="..." class="btn btn-default"> Voltar </a>
+					<a href="..." class="btn btn-primary"> Efetuar compra </a>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>
