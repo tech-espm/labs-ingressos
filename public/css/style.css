@@ -1,2 +1,85 @@
+html {
+	min-height: 100%;
+	height: 100%;
+}
+
 body {
+	min-height: 100%;
+}
+
+main {
+	padding: 15px;
+}
+
+label, .cor-destaque, h1, h2, h3, h4, h5, h6 {
+	color: #ff0949;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;
+	margin-bottom: 30px;
+}
+
+img {
+	max-width: 100%;
+}
+
+.navbar {
+	padding: 15px;
+}
+
+.navbar-brand {
+	padding: 0;
+}
+
+.panel, .panel .checkbox > label {
+	color: #333;
+}
+
+.panel .form-control:not(:focus) {
+	border-color: #ffcada;
+	background: #ffcada;
+	color: #333;
+}
+
+.panel-heading, .panel-footer {
+	text-align: center;
+}
+
+.form-control {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	-webkit-transition: border-color ease-in-out .15s, background-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, background-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, background-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+	border-color: #fff;
+	background: #fff;
+	color: #333;
+	-webkit-box-shadow: 0 0 0 4px rgba(255, 9, 73, 0.6);
+    box-shadow: 0 0 0 4px rgba(255, 9, 73, 0.6);
+}
+
+.limitador {
+	margin: 0 auto;
+	max-width: 1000px;
+}
+
+.fundo-destaque {
+	background-color: #1a1a1a;
+}
+
+.lista-compacta {
+	display: inline-block;
+	text-align: left;
+}
+
+a.alternativo {
+	color: #fff;
+}
+
+a.alternativo:hover {
+	color: #aaa;
 }

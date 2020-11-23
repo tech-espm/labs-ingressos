@@ -1,0 +1,138 @@
+﻿<div class="limitador">
+	<header class="festa"></header>
+
+	<div class="container-fluid">
+		<h1>Dados dos Ingressos</h1>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="nome da festa">Festa</label>
+					<select id="nome da festa" class="form-control" size="1">
+						<option value="nome da festa 1">Festa do Branco</option>
+						<option value="nome da festa 2">Festa X</option>
+						<option value="nome da festa 3">Festa Y</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="nome da festa">Tipo de ingresso</label>
+					<select id="nome da festa" class="form-control" size="1">
+						<option value="inteira">Inteira</option>
+						<option value="meia escolar">Meia</option>
+						<option value="meia universidade">Meia Universidade</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="setor">Setor</label>
+					<select id="setor" class="form-control" size="1">
+						<option value="pista">Pista</option>
+						<option value="área vip">Área Vip</option>
+						<option value="camarote">Camarote</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="quantidade">Quantidade</label>
+					<input id="quantidade" class="form-control" type="number" />
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="valor">Valor unitário</label>
+					<input id="valor" class="form-control" type="number" />
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label for="recebe">Você recebe</label>
+					<input id="recebe" class="form-control" type="number" readonly="readonly" />
+				</div>
+			</div>
+		</div>
+
+		<hr />
+
+		<h1>Seus Dados Bancários</h1>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="conta">Número da conta</label>
+					<input id="conta" class="form-control" type="number" />
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="agencia">Agência</label>
+					<input id="agencia" class="form-control" type="number" />
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="banco">Banco</label>
+					<input id="banco" class="form-control" type="number" />
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="cpf">CPF</label>
+					<input id="cpf" class="form-control" type="number" />
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="checkbox">
+					<label for="salvar dados para vendas futuras">
+						<input type="checkbox" id="salvar dados" /> Salvar dados para vendas futuras
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<label for="você receberá">Anexar comprovante de Ingresso ? </label>
+				<button type="button" class="btn btn-dark btn-block">Buscar</button>
+			</div>
+
+			<div class="col-sm-3"></div>
+
+			<div class="col-sm-3">
+				<button type="button" class="btn btn-dark btn-block">Voltar</button>
+			</div>
+
+			<div class="col-sm-3">
+				<button type="button" class="btn btn-dark btn-block">Postar ingresso</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%- contentFor("styles") %>
+<style type="text/css">
+	.festa {
+		background-image: url(/imagens/festa.jpg);
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		text-align: center;
+		padding: 150px 50px;
+	}
+</style>

@@ -1,98 +1,46 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	
-	<!-- jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+﻿<form class="panel panel-default limitador">
+	<div class="panel-heading">
+		<h1>Inscrever-se</h1>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			<label for="E-mail">E-mail</label>
+			<input id="E-mail" class="form-control" type="text" />
+		</div>
 
-<!-- Bootstrap 3 -->
-<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
-<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<div class="form-group">
+			<label for="Senha"> Senha </label>
+			<input id="Senha" class="form-control" type="text" />
+		</div>
 
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet">
+		<div class="form-group">
+			<label for="Confirmar senha"> Confirmar senha </label>
+			<input id="Confirmar senha" class="form-control" type="text" />
+		</div>
 
-	
-	<title>Título da Página</title>
-	
-	<style type="text/css">
-	
-	body{
-		background-color:#d3d3d3 ;
-		color: #ff0949;	
- 	    font-family: Prompt;
+		<div class="form-group">
+			<label for="Celular"> Celular </label>
+			<input id="Celular" class="form-control" type="text" />
+		</div>
+
+		<div class="form-group">
+			<label for="Faculdade"> Faculdade </label>
+			<input id="Faculdade" class="form-control" type="text" />
+		</div>
+
+		<div class="checkbox">
+			<label><input type="checkbox" /> Li e concordo com os <a href="...">termos de uso</a></label>
+		</div>
+	</div>
+	<div class="panel-footer">
+		<button type="submit" class="btn btn-primary btn-lg">Confirmar</button>
+	</div>
+</form>
+
+<%- contentFor("styles") %>
+<style type="text/css">
+	.limitador {
+		max-width: 400px;
+		text-align: left;
 	}
-    
-    .limitador {
-     	padding-top:10%;
-		padding-bottom:10%;
-		max-width: 800px;
-		margin: 0px auto;
-	}
-		
-		
-	.caixa {
-		display: inline-block;
-        }
-        
-	</style>
-
-</head>
-<body>
-
-	<form>	
-        <div class = "container-fluid limitador">
-            <div class = "row">
-                <div class = "col-sm-6">
-            
-                    <h3> Inscrever-se </h3>  
-            
-                    <div class = "row">
-                        <div class = "col-sm-6">
-                            <div class="form-group">
-                                <label for = "E-mail">E-mail</label>
-                                <input id = "E-mail" class = "form-control" type = "text">
-                            </div>
-                        </div>
-                    
-                    
-                        <div class = "col-sm-6">
-                            <div class="form-group">
-                                <label for = "Senha"> Senha </label>
-                                <input id = "Senha" class = "form-control" type = "text">
-                            </div>
-                        </div>
-                    
-                    
-                        <div class = "col-sm-6">
-                            <div class="form-group">
-                                <label for = "Confirmar senha"> Confirmar senha </label>
-                                <input id = "Confirmar senha" class = "form-control" type = "text">
-                            </div>
-                        </div> 
-                    
-                    
-                        <div class = "col-sm-6">
-                            <div class="form-group">
-                                <label for = "Celular"> Celular </label>
-                                <input id = "Celular" class = "form-control" type = "text">
-                            </div>
-                        </div>
-                    
-                    
-                        <div class = "col-sm-6">
-                            <div class="form-group">
-                                <label for = "Faculdade"> Faculdade </label>
-                                <input id = "Faculdade" class = "form-control" type = "text">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-  
-  </form>
-</body>
-</html>
+</style>

@@ -56,4 +56,28 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 	res.redirect(appsettings.root + "/");
 }));
 
+router.get("/alterarDados", (req: express.Request, res: express.Response) => {
+	res.render("safetix/alterarDados", { layout: "layout-safetix" });
+});
+
+router.get("/alterarIcone", (req: express.Request, res: express.Response) => {
+	res.render("safetix/alterarIcone", { layout: "layout-safetix" });
+});
+
+router.get("/cadastro", (req: express.Request, res: express.Response) => {
+	res.render("safetix/cadastro", { layout: "layout-safetix" });
+});
+
+router.get("/dadosBanca", (req: express.Request, res: express.Response) => {
+	res.render("safetix/dadosBanca", { layout: "layout-safetix" });
+});
+
+router.get("/pagina-usuario", (req: express.Request, res: express.Response) => {
+	res.render("safetix/pagina-usuario", { layout: "layout-safetix" });
+});
+
+router.get("/telaPagamento", (req: express.Request, res: express.Response) => {
+	res.render("safetix/telaPagamento", { layout: "layout-safetix" });
+});
+
 export = router;
