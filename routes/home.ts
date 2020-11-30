@@ -80,4 +80,16 @@ router.get("/telaPagamento", (req: express.Request, res: express.Response) => {
 	res.render("safetix/telaPagamento", { layout: "layout-safetix" });
 });
 
+router.get("/index", (req: express.Request, res: express.Response) => {
+	res.render("safetix/index", { layout: "layout-safetix" });
+});
+
+router.get("/ingressos", (req: express.Request, res: express.Response) => {
+	res.render("safetix/ingressos", { layout: "layout-safetix" });
+});
+
+router.get("/carrinho", (req: express.Request, res: express.Response) => {
+	res.render("safetix/carrinho", { layout: "layout-safetix" });
+});
+
 export = router;
