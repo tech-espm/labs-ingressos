@@ -92,4 +92,12 @@ router.get("/carrinho", (req: express.Request, res: express.Response) => {
 	res.render("safetix/carrinho", { layout: "layout-safetix" });
 });
 
+router.get("/telaAjuda", (req: express.Request, res: express.Response) => {
+	res.render("safetix/telaAjuda", { layout: "layout-safetix" });
+});
+
+router.get("/quemsomos", (req: express.Request, res: express.Response) => {
+	res.render("safetix/quemsomos", { layout: "layout-safetix" });
+});
+
 export = router;
