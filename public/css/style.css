@@ -11,8 +11,21 @@ main {
 	padding: 15px;
 }
 
-label, .cor-destaque, h1, h2, h3, h4, h5, h6 {
+label {
+	font-weight: normal;
+}
+
+.cor-destaque, h1, h2, h3, h4, h5, h6 {
 	color: #ff0949;
+}
+
+.cor-preto {
+	color: #000;
+}
+
+.cor-detalhe {
+	color: #444;
+	font-style: italic;
 }
 
 h1, h2, h3, h4, h5, h6 {
