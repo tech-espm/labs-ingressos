@@ -100,4 +100,8 @@ router.get("/quemsomos", (req: express.Request, res: express.Response) => {
 	res.render("safetix/quemsomos", { layout: "layout-safetix" });
 });
 
+router.get("/confirmacaopagamento", (req: express.Request, res: express.Response) => {
+	res.render("safetix/confirmacaopagamento", { layout: "layout-safetix" });
+});
+
 export = router;
