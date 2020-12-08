@@ -104,4 +104,8 @@ router.get("/confirmacaopagamento", (req: express.Request, res: express.Response
 	res.render("safetix/confirmacaopagamento", { layout: "layout-safetix" });
 });
 
+router.get("/ingressopublicado", (req: express.Request, res: express.Response) => {
+	res.render("safetix/ingressopublicado", { layout: "layout-safetix" });
+});
+
 export = router;
