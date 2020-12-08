@@ -6,12 +6,15 @@ import appsettings = require("../appsettings");
 const router = express.Router();
 
 router.all("/", wrap(async (req: express.Request, res: express.Response) => {
+	res.render("safetix/index", { layout: "layout-safetix" });
+	/*
 	let u = await Usuario.cookie(req);
 	if (!u) {
 		res.redirect(appsettings.root + "/login");
 	} else {
 		res.render("home/dashboard", { titulo: "Dashboard", usuario: u });
 	}
+	*/
 }));
 
 router.all("/login", wrap(async (req: express.Request, res: express.Response) => {
@@ -78,10 +81,6 @@ router.get("/pagina-usuario", (req: express.Request, res: express.Response) => {
 
 router.get("/telaPagamento", (req: express.Request, res: express.Response) => {
 	res.render("safetix/telaPagamento", { layout: "layout-safetix" });
-});
-
-router.get("/index", (req: express.Request, res: express.Response) => {
-	res.render("safetix/index", { layout: "layout-safetix" });
 });
 
 router.get("/ingressos", (req: express.Request, res: express.Response) => {
