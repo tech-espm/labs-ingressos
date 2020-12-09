@@ -26,6 +26,7 @@ CREATE TABLE usuario (
   login varchar(100) NOT NULL,
   nome varchar(100) NOT NULL,
   idperfil int NOT NULL,
+  versao int NOT NULL,
   senha varchar(100) NOT NULL,
   token char(32) DEFAULT NULL,
   idtermouso int NOT NULL,
@@ -39,7 +40,7 @@ CREATE TABLE usuario (
   CONSTRAINT usuario_idperfil_FK FOREIGN KEY (idperfil) REFERENCES perfil (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO usuario (login, nome, idperfil, senha, token, criacao, idtermouso, nascimento, telefone, faculdade) VALUES ('admin', 'Administrador', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW(), 0, '2000-01-01', '', '');
+INSERT INTO usuario (login, nome, idperfil, senha, token, criacao, idtermouso, nascimento, telefone, faculdade) VALUES ('admin@safetix.com.br', 'Administrador', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW(), 0, '2000-01-01', '', '');
 
 -- DROP TABLE IF EXISTS tipo;
 CREATE TABLE tipo (

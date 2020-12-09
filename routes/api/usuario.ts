@@ -11,7 +11,7 @@ router.post("/alterarPerfil", wrap(async (req: express.Request, res: express.Res
 	let u = await Usuario.cookie(req, res);
 	if (!u)
 		return;
-	jsonRes(res, 400, await u.alterarPerfil(res, req.body.nome as string, req.body.senhaAtual as string, req.body.novaSenha as string));
+	jsonRes(res, 400, await u.alterarPerfil(res, req.body.nome as string, req.body.senhaAtual as string, req.body.novaSenha as string, req.body.imagemPerfil as string));
 }));
 
 router.get("/listar", wrap(async (req: express.Request, res: express.Response) => {
@@ -31,12 +31,15 @@ router.get("/obter", wrap(async (req: express.Request, res: express.Response) =>
 
 router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req, res, true);
-	if (!u)
+	let novo = req.body as Usuario;
+	if (!novo) {
+		res.status(400).json("Dados inválidos");
 		return;
-	u = req.body as Usuario;
-	if (u)
-		u.idperfil = parseInt(req.body.idperfil);
-	jsonRes(res, 400, u ? await Usuario.criar(u) : "Dados inválidos");
+	}
+	if (!u || !u.admin || !novo.idperfil) {
+		novo.idperfil = Usuario.IdPerfilComum;
+	}
+	jsonRes(res, 400, await Usuario.criar(novo));
 }));
 
 router.post("/alterar", wrap(async (req: express.Request, res: express.Response) => {

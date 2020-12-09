@@ -11,10 +11,14 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&amp;display=swap" />
 		<link rel="stylesheet" href="<%- root %>/lib/bootstrap-custom/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="<%- root %>/lib/font-awesome/css/font-awesome-1.0.2.min.css" />
-		<link rel="stylesheet" href="<%- root %>/css/style.css" />
+		<link rel="stylesheet" href="<%- root %>/css/style-safetix-1.0.0.css" />
 
 		<script type="text/javascript" src="<%- root %>/lib/jquery/js/jquery-1.0.1.min.js"></script>
 		<script type="text/javascript" src="<%- root %>/lib/bootstrap-custom/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="<%- root %>/lib/jquery-mask/js/jquery-mask-1.0.0.min.js"></script>
+		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/jquery-validate-1.0.3.min.js"></script>
+		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/messages_pt_BR.min.js"></script>
+		<script type="text/javascript" src="<%- root %>/js/main-1.0.10.js"></script>
 
 		<%- defineContent("styles") %>
 	</head>
@@ -26,23 +30,34 @@
 						<span class="sr-only">Alternar menu</span>
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img alt="Safetix" src="/imagens/logo1.png" width="200" /></a>
+					<a class="navbar-brand" href="<%- root %>/"><img alt="Safetix" src="/imagens/logo1.png" width="200" /></a>
 				</div>
 
 				<div class="collapse navbar-collapse" id="navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="#">quem somos</a></li>
+						<li><a href="<%- root %>/quemsomos">quem somos</a></li>
 						<li><a href="#">como funcionamos</a></li>
-						<li><a href="#">ajuda</a></li>
+						<li><a href="<%- root %>/ajuda">ajuda</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a class="btn btn-primary btn-sm" href="#">usuário</a></li>
-						<li><a class="btn btn-primary btn-sm" href="#">compras</a></li>
+						<% if (usuario) { %>
+							<% if (usuario.admin) { %>
+							<li><a class="btn btn-primary btn-sm" href="<%- root %>/dashboard">dashboard</a></li>
+							<% } else { %>
+							<li><a class="btn btn-primary btn-sm" href="<%- root %>/perfilexterno">meu perfil</a></li>
+							<% } %>
+						<li><a class="btn btn-primary btn-sm" href="<%- root %>/logout">sair</a></li>
+						<% } else { %>
+						<li><a class="btn btn-primary btn-sm" href="<%- root %>/cadastro">cadastrar</a></li>
+						<li><a class="btn btn-primary btn-sm" href="<%- root %>/login">entrar</a></li>
+						<% } %>
 					</ul>
 				</div>
 			</div>
 		</nav>
 
-		<%- body %> <%- defineContent("scripts") %>
+		<%- body %>
+
+		<%- defineContent("scripts") %>
 	</body>
 </html>

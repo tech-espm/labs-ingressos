@@ -7,13 +7,13 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="<%- root %>/"><img alt="Logo" src="<%- root %>/imagens/logo-cabecalho.png" /></a>
+		<a class="navbar-brand" href="<%- root %>/"><img alt="Logo" src="<%- root %>/imagens/logo12.png" /></a>
 	</div>
 
 	<ul class="nav navbar-top-links navbar-right">
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-				<img class="profile-img" alt="Perfil" src="<%- root %>/imagens/user.png" width="40" height="40" /><%=usuario.login %> <i class="fa fa-caret-down"></i>
+				<img class="profile-img" alt="Imagem de Perfil" src="<%- root %>/imagens/<%-(usuario.versao ? ('perfil/' + usuario.id + '.jpg?' + usuario.versao) : 'user.png') %>" width="40" height="40" /><%=usuario.login %> <i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
 				<li>
@@ -34,7 +34,7 @@
 				<li class="sidebar-spacer"></li>
 
 				<li>
-					<a href="<%- root %>/"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
+					<a href="<%- root %>/dashboard"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
 				</li>
 
 				<% if (usuario.admin) { %>

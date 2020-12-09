@@ -8,16 +8,21 @@ import appsettings = require("../appsettings");
 import intToHex = require("../utils/intToHex");
 import converterDataISO = require("../utils/converterDataISO");
 import emailValido = require("../utils/emailValido");
+import Upload = require("../infra/upload");
 
 export = class Usuario {
 
-	private static readonly IdAdmin = 1;
-	private static readonly IdPerfilAdmin = 1;
+	public static readonly CaminhoRelativoPerfil = "public/imagens/perfil/";
+
+	public static readonly IdAdmin = 1;
+	public static readonly IdPerfilAdmin = 1;
+	public static readonly IdPerfilComum = 2;
 
 	public id: number;
 	public login: string;
 	public nome: string;
 	public idperfil: number;
+	public versao: number;
 	public senha: string;
 	public idtermouso: number;
 	public nascimento: string;
@@ -45,7 +50,7 @@ export = class Usuario {
 			let usuario: Usuario = null;
 
 			await Sql.conectar(async (sql: Sql) => {
-				let rows = await sql.query("select id, login, nome, idperfil, token from usuario where id = ?", [id]);
+				let rows = await sql.query("select id, login, nome, idperfil, versao, token from usuario where id = ?", [id]);
 				let row;
 
 				if (!rows || !rows.length || !(row = rows[0]))
@@ -61,6 +66,7 @@ export = class Usuario {
 				u.login = row.login as string;
 				u.nome = row.nome as string;
 				u.idperfil = row.idperfil as number;
+				u.versao = row.versao as number;
 				u.admin = (u.idperfil === Usuario.IdPerfilAdmin);
 
 				usuario = u;
@@ -94,7 +100,7 @@ export = class Usuario {
 		await Sql.conectar(async (sql: Sql) => {
 			login = login.normalize().trim().toLowerCase();
 
-			let rows = await sql.query("select id, nome, idperfil, senha from usuario where login = ?", [login]);
+			let rows = await sql.query("select id, nome, idperfil, versao, senha from usuario where login = ?", [login]);
 			let row;
 			let ok: boolean;
 
@@ -112,6 +118,7 @@ export = class Usuario {
 			u.login = login;
 			u.nome = row.nome as string;
 			u.idperfil = row.idperfil as number;
+			u.versao = row.versao as number;
 			u.admin = (u.idperfil === Usuario.IdPerfilAdmin);
 
 			res.cookie(appsettings.cookie, cookieStr, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/", secure: appsettings.cookieSecure });
@@ -128,7 +135,7 @@ export = class Usuario {
 		});
 	}
 
-	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string): Promise<string> {
+	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string, imagemPerfil: string): Promise<string> {
 		nome = (nome || "").normalize().trim();
 		if (nome.length < 3 || nome.length > 100)
 			return "Nome inválido";
@@ -160,6 +167,31 @@ export = class Usuario {
 
 				this.nome = nome;
 			}
+
+			if (imagemPerfil) {
+				if (!imagemPerfil.startsWith("data:image/jpeg;base64,") || imagemPerfil.length === 23) {
+					r = (senhaAtual ? "A senha foi alterada com sucesso, mas a imagem de perfil é inválida" : "Imagem de perfil inválida");
+					return;
+				}
+
+				if (imagemPerfil.length > (23 + (256 * 1024 * 4 / 3))) {
+					r = (senhaAtual ? "A senha foi alterada com sucesso, mas a imagem de perfil é muito grande" : "Imagem de perfil muito grande");
+					return;
+				}
+
+				try {
+					await Upload.gravarArquivo({
+						buffer: Buffer.from(imagemPerfil.substr(23), "base64")
+					}, Usuario.CaminhoRelativoPerfil, this.id + ".jpg");
+
+					this.versao++;
+
+					await sql.query("update usuario set versao = ? where id = ?", [this.versao, this.id]);
+				} catch (ex) {
+					r = (senhaAtual ? "A senha foi alterada com sucesso, mas ocorreu um erro ao gravar a imagem de perfil" : "Erro ao gravar a imagem de perfil");
+					return;
+				}
+			}
 		});
 
 		return r;
@@ -185,6 +217,10 @@ export = class Usuario {
 		if (u.faculdade.length < 3 || u.faculdade.length > 50)
 			return "Faculdade inválida";
 
+		u.idperfil = parseInt(u.idperfil as any);
+		if (isNaN(u.idperfil))
+			return "Perfil inválido";
+
 		return null;
 	}
 
@@ -192,7 +228,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
+			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, u.versao, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
 		});
 
 		return (lista || []);
@@ -202,7 +238,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select id, login, nome, idperfil, idtermouso, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
+			lista = await sql.query("select id, login, nome, idperfil, versao, idtermouso, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
 		});
 
 		return ((lista && lista[0]) || null);
@@ -217,14 +253,18 @@ export = class Usuario {
 		if (u.login.length < 3 || u.login.length > 100 || !emailValido(u.login))
 			return "Login inválido";
 
+		u.senha = (u.senha || "").normalize();
+		if (u.senha.length < 6 || u.senha.length > 16)
+			return "Senha inválida";
+
 		await Sql.conectar(async (sql: Sql) => {
 			try {
-				await sql.query("insert into usuario (login, nome, idperfil, senha, idtermouso, nascimento, telefone, faculdade, criacao) values (?, ?, ?, ?, 0, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, appsettings.usuarioHashSenhaPadrao, u.nascimento, u.telefone, u.faculdade]);
+				await sql.query("insert into usuario (login, nome, idperfil, versao, senha, idtermouso, nascimento, telefone, faculdade, criacao) values (?, ?, ?, 0, ?, 0, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, await GeradorHash.criarHash(u.senha), u.nascimento, u.telefone, u.faculdade]);
 			} catch (e) {
 				if (e.code) {
 					switch (e.code) {
 						case "ER_DUP_ENTRY":
-							res = `O login ${u.login} já está em uso`;
+							res = `O e-mail ${u.login} já está em uso`;
 							break;
 						case "ER_NO_REFERENCED_ROW":
 						case "ER_NO_REFERENCED_ROW_2":

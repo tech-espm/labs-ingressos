@@ -1,0 +1,8 @@
+
+#side-menu > li > a > i {
+    color: #ff507f;
+}
+
+#side-menu > li > a:focus, #side-menu > li > a:hover, #side-menu > li.active > a, #side-menu > li > a.active {
+    border-left-color: #ff0949;
+}

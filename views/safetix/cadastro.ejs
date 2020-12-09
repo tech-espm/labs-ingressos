@@ -1,35 +1,45 @@
-﻿<form class="panel panel-default limitador">
+﻿<form class="panel panel-default limitador" id="form">
 	<div class="panel-heading">
 		<h1>Inscrever-se</h1>
 	</div>
 	<div class="panel-body">
 		<div class="form-group">
-			<label for="E-mail">E-mail</label>
-			<input id="E-mail" class="form-control" type="text" />
+			<label for="login">E-mail</label>
+			<input id="login" name="login" class="form-control" type="email" />
 		</div>
 
 		<div class="form-group">
-			<label for="Senha"> Senha </label>
-			<input id="Senha" class="form-control" type="text" />
+			<label for="nome">Nome</label>
+			<input id="nome" name="nome" class="form-control" type="text" />
 		</div>
 
 		<div class="form-group">
-			<label for="Confirmar senha"> Confirmar senha </label>
-			<input id="Confirmar senha" class="form-control" type="text" />
+			<label for="nascimento">Data de Nascimento</label>
+			<input id="nascimento" name="nascimento" class="form-control" type="date" />
 		</div>
 
 		<div class="form-group">
-			<label for="Celular"> Celular </label>
-			<input id="Celular" class="form-control" type="text" />
+			<label for="senha">Senha</label>
+			<input id="senha" name="senha" class="form-control" type="password" />
 		</div>
 
 		<div class="form-group">
-			<label for="Faculdade"> Faculdade </label>
-			<input id="Faculdade" class="form-control" type="text" />
+			<label for="senha2">Confirmar Senha</label>
+			<input id="senha2" name="senha2" class="form-control" type="password" />
+		</div>
+
+		<div class="form-group">
+			<label for="telefone">Celular</label>
+			<input id="telefone" name="telefone" class="form-control" type="text" />
+		</div>
+
+		<div class="form-group">
+			<label for="faculdade">Faculdade</label>
+			<input id="faculdade" name="faculdade" class="form-control" type="text" />
 		</div>
 
 		<div class="checkbox">
-			<label><input type="checkbox" /> Li e concordo com os <a href="...">termos de uso</a></label>
+			<label><input type="checkbox" id="idtermouso" name="idtermouso" value="1" /> Li e concordo com os <a target="_blank" href="<%- root %>/termo">termos de uso</a></label>
 		</div>
 	</div>
 	<div class="panel-footer">
@@ -44,3 +54,67 @@
 		text-align: left;
 	}
 </style>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	maskMobilePhone("#telefone");
+
+	$("#form").validate({
+		rules: {
+			login: {
+				required: true,
+				minlength: 3,
+				maxlength: 100,
+				email: true
+			},
+			nome: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			},
+			nascimento: {
+				required: true
+			},
+			senha: {
+				required: true,
+				minlength: 6,
+				maxlength: 16
+			},
+			senha2: {
+				required: true,
+				equalTo: "#senha"
+			},
+			telefone: {
+				required: true,
+				minlength: 3,
+				maxlength: 30
+			},
+			faculdade: {
+				required: true,
+				minlength: 3,
+				maxlength: 50
+			},
+			idtermouso: {
+				required: true
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			JsonWebApi.postFormData("<%- root %>/api/usuario/criar", form, function (response) {
+				if (response.success) {
+					alert("Usuário criado com sucesso! " + emoji.happy);
+					location.href = "<%- root %>/login";
+				} else {
+					alert(response.value, true);
+				}
+			});
+		}
+	});
+	//]]>
+</script>
