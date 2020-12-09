@@ -4,11 +4,11 @@
 	<div class="fundo-horario">
         <div class="row">
             <div class="col-xs-10">
-                <h3>12/09/2020 17h até 13/09/2020 17h</h3>
-                <h3>Complexo Canindé</h3>
+                <h3 class="cor-branco">12/09/2020 17h até 13/09/2020 17h</h3>
+                <h3 class="cor-branco">Complexo Canindé</h3>
             </div>
             <div class="col-xs-2 text-right">
-                <a href="#" data-toggle="modal" data-target="#modalComprar">Ver +</a>
+                <a class="cor-branco" href="#" data-toggle="modal" data-target="#modalComprar">Ver +</a>
             </div>
         </div>
 	</div>
@@ -25,7 +25,7 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 	<div class="ingresso">
@@ -38,7 +38,7 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 	<div class="ingresso">
@@ -51,7 +51,7 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 
@@ -65,7 +65,7 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 	<div class="ingresso">
@@ -78,7 +78,7 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 	<div class="ingresso">
@@ -91,12 +91,32 @@
 		<div class="informacao-direita">
 			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
 			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" alt=""/></a>
+			<a href="#"><img style="margin-top: -47px" src="/imagens/comprar.png" width="100px;" id="btnComprar" data-toggle="modal" data-target="#modalComprar2" alt=""/></a>
 		</div>
 	</div>
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="modalComprar">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Comprar</h4>
+			</div>
+			<div class="modal-body">
+				<p>Informações</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-primary">Comprar!</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalComprar2">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -151,5 +171,8 @@
 	.informacao-direita {
 		width: 150px;
 		border-radius: 0px 10px 10px 0px;
+	}
+	.cor-branco{
+		color: #fff;
 	}
 </style>
