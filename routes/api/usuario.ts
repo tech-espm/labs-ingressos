@@ -30,7 +30,7 @@ router.get("/obter", wrap(async (req: express.Request, res: express.Response) =>
 }));
 
 router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
-	let u = await Usuario.cookie(req, res, true);
+	let u = await Usuario.cookie(req);
 	let novo = req.body as Usuario;
 	if (!novo) {
 		res.status(400).json("Dados inválidos");
