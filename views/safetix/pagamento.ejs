@@ -116,7 +116,28 @@
 		<div class="row">
 			<div class="col-sm-6"></div>
 			<div class="col-sm-6 text-right">
-				<button type="button" onclick="pagar()" class="btn btn-primary btn-lg">Efetuar Pagamento</button>
+				<button type="button" onclick="pagar()" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#comprar3">Efetuar Pagamento</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="comprar3">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Confirmar Pagamento?</h4>
+			</div>
+			<div class="modal-body" style="display: flex; justify-content: center;">
+				<button style="margin-right:10px;" type="button" class="btn btn-primary"><a style="color:white" href="<%- root %>/confirmacaopagamento">Sim</a></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+			</div>
+			<div class="modal-footer">
+				
+				
 			</div>
 		</div>
 	</div>
