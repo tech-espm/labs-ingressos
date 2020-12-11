@@ -40,11 +40,11 @@ export = class Evento {
 		if (e.endereco.length < 3 || e.endereco.length > 100)
 			return "Endereço inválido";
 
-		e.latitude = parseFloat(e.latitude as any);
+		e.latitude = parseFloat((e.latitude|| 0).toString().replace(",", "."));
 		if (isNaN(e.latitude) || e.latitude < -90 || e.latitude > 90)
 			return "Latitude inválida";
 
-		e.longitude = parseFloat(e.longitude as any);
+		e.longitude = parseFloat((e.longitude|| 0).toString().replace(",", "."));
 		if (isNaN(e.longitude) || e.longitude < -180 || e.longitude > 180)
 			return "Longitude inválida";
 
@@ -105,7 +105,7 @@ export = class Evento {
 		let lista: Evento[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = (await sql.query("select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, descricao, endereco, latitude, longitude from evento where id = ?", [id])) as Evento[];
+			lista = (await sql.query("select id, nome, date_format(datainicial, '%Y-%m-%d') datainicial, date_format(datafinal, '%Y-%m-%d') datafinal, horario, descricao, endereco, latitude, longitude from evento where id = ?", [id])) as Evento[];
 		});
 		
 		return (lista && lista[0]) || null;
