@@ -1,6 +1,6 @@
-﻿import Sql = require("../infra/sql");
+﻿import app = require("teem");
 
-export = class Tipo {
+class Tipo {
 	public id: number;
 	public nome: string;
 
@@ -18,7 +18,7 @@ export = class Tipo {
 	public static async listar(): Promise<Tipo[]> {
 		let lista: Tipo[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome from tipo order by nome asc")) as Tipo[];
 		});
 
@@ -28,7 +28,7 @@ export = class Tipo {
 	public static async obter(id: number): Promise<Tipo> {
 		let lista: Tipo[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome from tipo where id = ?", [id])) as Tipo[];
 		});
 
@@ -40,7 +40,7 @@ export = class Tipo {
 		if ((res = Tipo.validar(t)))
 			return res;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			try {
 				await sql.query("insert into tipo (nome) values (?)", [t.nome]);
 			} catch (e) {
@@ -59,10 +59,10 @@ export = class Tipo {
 		if ((erro = Tipo.validar(t)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			try {
 				await sql.query("update tipo set nome = ? where id = ?", [t.nome, t.id]);
-				if (!sql.linhasAfetadas)
+				if (!sql.affectedRows)
 					erro = "Tipo não encontrado";
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
@@ -78,12 +78,14 @@ export = class Tipo {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from tipo where id = ?", [id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Tipo não encontrado";
 		});
 
 		return erro;
 	}
 };
+
+export = Tipo;

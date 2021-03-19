@@ -1,7 +1,7 @@
-import Sql = require("../infra/sql");
+import app = require("teem");
 import emailValido = require("../utils/emailValido");
 
-export = class Ingresso {
+class Ingresso {
 	public id: number;
 	public tipo: string;
     public valor: number;
@@ -46,7 +46,7 @@ export = class Ingresso {
 	public static async listar(): Promise<Ingresso[]> {
 		let lista: Ingresso[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select i.tipo, i.valor, i.idevento, e.nome evento from ingresso i inner join evento e on e.id = i.idevento")) as Ingresso[];
 		});
 
@@ -56,7 +56,7 @@ export = class Ingresso {
 	public static async listarDeEvento(idevento: number): Promise<Ingresso[]> {
 		let lista: Ingresso[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select tipo, valor, idevento from ingresso where idevento = ? and idpedido = 0", [idevento])) as Ingresso[];
 		});
 
@@ -68,7 +68,7 @@ export = class Ingresso {
 		if ((erro = Ingresso.validar(i)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+			await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("insert into ingresso (tipo, valor, idevento, idusuario, idpedido, emaildestino, emailenviado, emailrecebido) values (?, ?, ?, ?, ?, ?, 0, 0)" [i.tipo, i.valor, i.idevento, i.idusuario, i.idpedido, i.emaildestino]);
 		});
 
@@ -80,9 +80,9 @@ export = class Ingresso {
 		if ((erro = Ingresso.validar(i)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+			await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update ingresso set tipo = ?, valor = ? where id = ?" [i.tipo, i.valor, i.id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Ingresso não encontrado";
 		});
 
@@ -92,12 +92,14 @@ export = class Ingresso {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from ingresso where id = ?", [id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Ingresso não encontrado";
 		});
 
 		return erro;
 	}
 };
+
+export = Ingresso;

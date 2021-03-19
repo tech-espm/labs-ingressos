@@ -1,6 +1,6 @@
-﻿import Sql = require("../infra/sql");
+﻿import app = require("teem");
 
-export = class Perfil {
+class Perfil {
 	public id: number;
 	public nome: string;
 
@@ -18,7 +18,7 @@ export = class Perfil {
 	public static async listar(): Promise<Perfil[]> {
 		let lista: Perfil[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome from perfil order by nome asc")) as Perfil[];
 		});
 
@@ -28,7 +28,7 @@ export = class Perfil {
 	public static async obter(id: number): Promise<Perfil> {
 		let lista: Perfil[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome from perfil where id = ?", [id])) as Perfil[];
 		});
 
@@ -40,7 +40,7 @@ export = class Perfil {
 		if ((erro = Perfil.validar(p)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			try {
 				await sql.query("insert into perfil (nome) values (?)", [p.nome]);
 			} catch (e) {
@@ -59,10 +59,10 @@ export = class Perfil {
 		if ((erro = Perfil.validar(p)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			try {
 				await sql.query("update perfil set nome = ? where id = ?", [p.nome, p.id]);
-				if (!sql.linhasAfetadas)
+				if (!sql.affectedRows)
 					erro = "Perfil não encontrado";
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
@@ -78,12 +78,14 @@ export = class Perfil {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from perfil where id = ?", [id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Perfil não encontrado";
 		});
 
 		return erro;
 	}
 };
+
+export = Perfil;

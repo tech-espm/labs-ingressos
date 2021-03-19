@@ -1,92 +1,93 @@
-import express = require("express");
-import wrap = require("express-async-error-wrapper");
-import jsonRes = require("../../utils/jsonRes");
+import app = require("teem");
 import Evento = require("../../models/evento");
+import Usuario = require("../../models/usuario");
+import jsonRes = require("../../utils/jsonRes");
 
-const router = express.Router();
+class EventoApiRoute {
+    public async listar(req: app.Request, res: app.Response) {
+        let lista = await Evento.listar();
 
-router.get("/listar", wrap(async (req: express.Request, res: express.Response) => {
-    let lista = await Evento.listar();
+        res.json(lista);
+    }
 
-    res.json(lista);
-}));
+    public async listarBusca(req: app.Request, res: app.Response) {
+        let lista = await Evento.listarBusca(req.query["nome"] as string, req.query["data"] as string);
 
-router.get("/listarBusca", wrap(async (req: express.Request, res: express.Response) => {
-    let lista = await Evento.listarBusca(req.query["nome"] as string, req.query["data"] as string);
+        res.json(lista);
+    }
 
-    res.json(lista);
-}));
+    @app.route.methodName("/obter/:id")
+    public async obter(req: app.Request, res: app.Response) {
+        let erro: string = null;
 
-router.get("/obter/:id", wrap(async (req: express.Request, res: express.Response) => {
-    let erro: string = null;
+        let id = parseInt(req.params["id"]);
 
-    let id = parseInt(req.params["id"]);
+        let evento: Evento = null;
 
-    let evento: Evento = null;
+        if (isNaN(id)) {
+            erro = "Id inválido";
+        } else {
+            evento = await Evento.obter(id);
 
-    if (isNaN(id)) {
-        erro = "Id inválido";
-    } else {
-        evento = await Evento.obter(id);
+            if (!evento) {
+                erro = "Evento não encontrado!";
+            }
+        }
 
-        if (!evento) {
-            erro = "Evento não encontrado!";
+        if (erro) {
+            res.status(400).json(erro);
+        } else {
+            res.json(evento);
         }
     }
 
-    if (erro) {
-        res.status(400).json(erro);
-    } else {
-        res.json(evento);
+    @app.http.post()
+    public async criar(req: app.Request, res: app.Response) {
+        let erro: string = null;
+
+        let evento = req.body as Evento;
+
+        erro = await Evento.criar(evento);
+
+        if(erro){
+            res.status(400).json(erro);
+        }else{
+            res.json(true);
+        }
     }
 
-}));
+    @app.http.post()
+    public async alterar(req: app.Request, res: app.Response) {
+        let erro: string = null;
 
-router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
-    let erro: string = null;
+        let evento = req.body as Evento;
 
-    let evento = req.body as Evento;
+        erro = await Evento.alterar(evento);
 
-    erro = await Evento.criar(evento);
-
-    if(erro){
-        res.status(400).json(erro);
-    }else{
-        res.json(true);
+        if(erro){
+            res.status(400).json(erro);
+        }else{
+            res.json(true);
+        }
     }
 
-}));
+    @app.route.methodName("/excluir/:id")
+    public async excluir(req: app.Request, res: app.Response) {
+        let erro: string = null;
 
-router.post("/alterar", wrap(async (req: express.Request, res: express.Response) => {
-    let erro: string = null;
+        let id = parseInt(req.params["id"]);
 
-    let evento = req.body as Evento;
-
-    erro = await Evento.alterar(evento);
-
-    if(erro){
-        res.status(400).json(erro);
-    }else{
-        res.json(true);
+        if(isNaN(id)){
+            erro = "Id inválido";
+        } else{
+            erro = await Evento.excluir(id);
+        }
+        if(erro){
+            res.status(400).json(erro);
+        }else{
+            res.json(true);
+        }
     }
+}
 
-}));
-
-router.get("/excluir/:id", wrap(async (req: express.Request, res: express.Response) => {
-    let erro: string = null;
-
-    let id = parseInt(req.params["id"]);
-
-    if(isNaN(id)){
-        erro = "Id inválido";
-    } else{
-        erro = await Evento.excluir(id);
-    }
-    if(erro){
-        res.status(400).json(erro);
-    }else{
-        res.json(true);
-    }
-}));
-
-export = router;
+export = EventoApiRoute;

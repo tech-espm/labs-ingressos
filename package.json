@@ -3,34 +3,23 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node src/app"
   },
   "description": "ingressos",
   "author": {
     "name": "ingressos"
   },
-  "main": "app.js",
+  "main": "src/app.js",
   "dependencies": {
-    "cookie-parser": "1.4.3",
-    "debug": "4.1.0",
-    "ejs": "2.6.1",
-    "express": "4.17.1",
-    "express-async-error-wrapper": "1.0.3",
-    "express-ejs-layouts": "2.5.0",
-    "lru-cache": "4.1.3",
-    "moment": "^2.24.0",
-    "multer": "^1.4.2",
-    "mysql": "^2.16.0"
+    "teem": ">=0.0.14"
   },
   "devDependencies": {
-    "@types/debug": "0.0.30",
-    "@types/express": "^4.16.1",
-    "@types/express-serve-static-core": "^4.16.2",
-    "@types/mime": "^1.3.1",
-    "@types/node": "^10.12.30",
-    "@types/serve-static": "^1.7.32"
+    "@types/express": "4.17.11",
+    "@types/express-serve-static-core": "4.17.18",
+    "@types/mysql": "2.15.17",
+    "@types/node": "14.14.21"
   },
   "engines": {
-    "node": "^10.14.1"
+    "node": ">=12.0.0"
   }
 }

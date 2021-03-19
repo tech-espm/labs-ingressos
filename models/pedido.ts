@@ -1,6 +1,6 @@
-import Sql = require("../infra/sql");
+import app = require("teem");
 
-export = class Pedido {
+class Pedido {
     public id: number;
     public idusuario: number;
     public idstatus: number;
@@ -21,7 +21,7 @@ export = class Pedido {
 	public static async listarDeUsuario(idusuario: number): Promise<Pedido[]> {
 		let lista: Pedido[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
             lista = (await sql.query("select idusuario, idstatus, date_format(data, '%d/%m/%Y %H:%i') data, valortotal from pedido where idusuario = ?", [idusuario])) as Pedido[];
 		});
 
@@ -33,7 +33,7 @@ export = class Pedido {
 		if ((erro = Pedido.validar(p)))
             return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
             await sql.query("insert into pedido (idusuario, idstatus, data, valortotal) values (?, 0, now(), 0)", [p.idusuario]);
 
             p.id = await sql.scalar("select last_insert_id()");
@@ -45,7 +45,7 @@ export = class Pedido {
 	public static async adicionarIngresso(idpedido: number, idingresso: number): Promise<string> {
         let erro: string = null;
 
-        await Sql.conectar(async (sql: Sql) => {
+        await app.sql.connect(async (sql: app.Sql) => {
             await sql.beginTransaction();
 
             const id = await sql.scalar("select id from pedido where id = ?", [idpedido]);
@@ -55,7 +55,7 @@ export = class Pedido {
             }
 
             await sql.query("update ingresso set idpedido = ? where id = ? and idpedido = 0", [idpedido, idingresso]);
-            if (!sql.linhasAfetadas) {
+            if (!sql.affectedRows) {
                 erro = "Ingresso não disponível";
                 return;
             }
@@ -71,7 +71,7 @@ export = class Pedido {
 	public static async removerIngresso(idpedido: number, idingresso: number): Promise<string> {
         let erro: string = null;
 
-        await Sql.conectar(async (sql: Sql) => {
+        await app.sql.connect(async (sql: app.Sql) => {
             await sql.beginTransaction();
 
             const id = await sql.scalar("select id from pedido where id = ?", [idpedido]);
@@ -81,7 +81,7 @@ export = class Pedido {
             }
 
             await sql.query("update ingresso set idpedido = 0 where id = ? and idpedido = ?", [idingresso, idpedido]);
-            if (!sql.linhasAfetadas) {
+            if (!sql.affectedRows) {
                 erro = "Ingresso não encontrado";
                 return;
             }
@@ -97,12 +97,12 @@ export = class Pedido {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
             await sql.beginTransaction();
 
             await sql.query("delete from pedido where id = ?", [id]);
 
-            if (!sql.linhasAfetadas) {
+            if (!sql.affectedRows) {
                 erro = "Pedido não encontrado";
                 return;
             }
@@ -115,3 +115,5 @@ export = class Pedido {
 		return erro;
 	}
 };
+
+export = Pedido;

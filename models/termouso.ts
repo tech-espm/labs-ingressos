@@ -1,4 +1,4 @@
-import Sql = require("../infra/sql");
+import app = require("teem");
 import converterDataISO = require("../utils/converterDataISO");
 
 export = class Termouso {
@@ -21,7 +21,7 @@ export = class Termouso {
 		if ((erro = Termouso.validar(tu)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("insert into termouso (descricao) values (?)", [tu.descricao]);
 		});
 
@@ -33,9 +33,9 @@ export = class Termouso {
 		if ((erro = Termouso.validar(tu)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update termouso set descricao = ? where id = ?", [tu.descricao, tu.id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Perfil não encontrado";
 		});
 
@@ -45,9 +45,9 @@ export = class Termouso {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from evento where id = ?", [id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Perfil não encontrado";
 		});
 

@@ -1,16 +1,14 @@
-﻿import { randomBytes } from "crypto";
+﻿import app = require("teem");
+import { randomBytes } from "crypto";
 import express = require("express");
 // https://www.npmjs.com/package/lru-cache
-import lru = require("lru-cache");
-import Sql = require("../infra/sql");
 import GeradorHash = require("../utils/geradorHash");
 import appsettings = require("../appsettings");
 import intToHex = require("../utils/intToHex");
 import converterDataISO = require("../utils/converterDataISO");
 import emailValido = require("../utils/emailValido");
-import Upload = require("../infra/upload");
 
-export = class Usuario {
+class Usuario {
 
 	public static readonly CaminhoRelativoPerfil = "public/imagens/perfil/";
 
@@ -49,7 +47,7 @@ export = class Usuario {
 			let id = parseInt(cookieStr.substr(0, 8), 16) ^ appsettings.usuarioHashId;
 			let usuario: Usuario = null;
 
-			await Sql.conectar(async (sql: Sql) => {
+			await app.sql.connect(async (sql: app.Sql) => {
 				let rows = await sql.query("select id, login, nome, idperfil, versao, token from usuario where id = ?", [id]);
 				let row;
 
@@ -97,7 +95,7 @@ export = class Usuario {
 		let r: string = null;
 		let u: Usuario = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			login = login.normalize().trim().toLowerCase();
 
 			let rows = await sql.query("select id, nome, idperfil, versao, senha from usuario where login = ?", [login]);
@@ -128,7 +126,7 @@ export = class Usuario {
 	}
 
 	public async efetuarLogout(res: express.Response): Promise<void> {
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update usuario set token = null where id = ?", [this.id]);
 
 			res.cookie(appsettings.cookie, "", { expires: new Date(0), httpOnly: true, path: "/", secure: appsettings.cookieSecure });
@@ -145,7 +143,7 @@ export = class Usuario {
 
 		let r: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			if (senhaAtual) {
 				let hash = await sql.scalar("select senha from usuario where id = ?", [this.id]) as string;
 				if (!await GeradorHash.validarSenha(senhaAtual.normalize(), hash)) {
@@ -180,9 +178,7 @@ export = class Usuario {
 				}
 
 				try {
-					await Upload.gravarArquivo({
-						buffer: Buffer.from(imagemPerfil.substr(23), "base64")
-					}, Usuario.CaminhoRelativoPerfil, this.id + ".jpg");
+					await app.fileSystem.saveBuffer(Usuario.CaminhoRelativoPerfil + this.id + ".jpg", Buffer.from(imagemPerfil.substr(23), "base64"));
 
 					this.versao++;
 
@@ -227,7 +223,7 @@ export = class Usuario {
 	public static async listar(): Promise<Usuario[]> {
 		let lista: Usuario[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, u.versao, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
 		});
 
@@ -237,7 +233,7 @@ export = class Usuario {
 	public static async obter(id: number): Promise<Usuario> {
 		let lista: Usuario[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = await sql.query("select id, login, nome, idperfil, versao, idtermouso, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
 		});
 
@@ -257,7 +253,7 @@ export = class Usuario {
 		if (u.senha.length < 6 || u.senha.length > 16)
 			return "Senha inválida";
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			try {
 				await sql.query("insert into usuario (login, nome, idperfil, versao, senha, idtermouso, nascimento, telefone, faculdade, criacao) values (?, ?, ?, 0, ?, 0, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, await GeradorHash.criarHash(u.senha), u.nascimento, u.telefone, u.faculdade]);
 			} catch (e) {
@@ -290,9 +286,9 @@ export = class Usuario {
 		if (u.id === Usuario.IdAdmin)
 			return "Não é possível editar o usuário administrador principal";
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update usuario set nome = ?, idperfil = ?, nascimento = ?, telefone = ?, faculdade = ? where id = ?", [u.nome, u.idperfil, u.nascimento, u.telefone, u.faculdade, u.id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Usuário não encontrado";
 		});
 
@@ -305,9 +301,9 @@ export = class Usuario {
 
 		let res: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from usuario where id = ?", [id]);
-			res = sql.linhasAfetadas.toString();
+			res = sql.affectedRows.toString();
 		});
 
 		return res;
@@ -316,16 +312,18 @@ export = class Usuario {
 	public static async redefinirSenha(id: number): Promise<string> {
 		let res: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			let login = await sql.scalar("select login from usuario where id = ?", [id]) as string;
 			if (!login) {
 				res = "0";
 			} else {
 				await sql.query("update usuario set token = null, senha = ? where id = ?", [appsettings.usuarioHashSenhaPadrao, id]);
-				res = sql.linhasAfetadas.toString();
+				res = sql.affectedRows.toString();
 			}
 		});
 
 		return res;
 	}
 }
+
+export = Usuario;

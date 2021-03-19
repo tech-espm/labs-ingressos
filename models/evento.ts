@@ -1,7 +1,7 @@
-import Sql = require("../infra/sql");
+import app = require("teem");
 import converterDataISO = require("../utils/converterDataISO");
 
-export = class Evento {
+class Evento {
 	public id: number;
 	public nome: string;
 	public datainicial: string;
@@ -54,7 +54,7 @@ export = class Evento {
 	public static async listar(): Promise<Evento[]> {
 		let lista: Evento[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento")) as Evento[];
 		});
 
@@ -64,7 +64,7 @@ export = class Evento {
 	public static async listarBusca(nome: string, data: string): Promise<Evento[]> {
 		let lista: Evento[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html
 			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-natural-language.html
 
@@ -104,7 +104,7 @@ export = class Evento {
 	public static async obter(id: number): Promise<Evento> {
 		let lista: Evento[] = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			lista = (await sql.query("select id, nome, date_format(datainicial, '%Y-%m-%d') datainicial, date_format(datafinal, '%Y-%m-%d') datafinal, horario, descricao, endereco, latitude, longitude from evento where id = ?", [id])) as Evento[];
 		});
 		
@@ -116,7 +116,7 @@ export = class Evento {
 		if ((erro = Evento.validar(e)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude) values (?,?,?,?,?,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
 		});
 
@@ -128,9 +128,9 @@ export = class Evento {
 		if ((erro = Evento.validar(e)))
 			return erro;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update evento set endereco = ?, longitude = ?, latitude = ?, horario = ?, nome = ?, datainicial = ?, datafinal = ?, descricao = ? where id = ?", [e.endereco, e.longitude, e.latitude, e.horario, e.nome, e.datafinal, e.datafinal, e.descricao, e.id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Evento não encontrado";
 		});
 
@@ -140,9 +140,9 @@ export = class Evento {
 	public static async excluir(id: number): Promise<string> {
 		let erro: string = null;
 
-		await Sql.conectar(async (sql: Sql) => {
+		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("delete from evento where id = ?", [id]);
-			if (!sql.linhasAfetadas)
+			if (!sql.affectedRows)
 				erro = "Evento não encontrado";
 		});
 
@@ -150,3 +150,5 @@ export = class Evento {
 	}
 
 };
+
+export = Evento;

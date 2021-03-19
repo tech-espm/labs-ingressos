@@ -1,11 +1,5 @@
 {
 	"files.exclude": {
-		"routes/**/*.js": true,
-		"utils/**/*.js": true,
-		"public/**/app_data/": true,
-		"public/**/dados/": true,
-		"models/**/*.js": true,
-		"infra/**/*.js": true,
 		"**/*.rsuser": true,
 		"**/*.suo": true,
 		"**/*.user": true,
@@ -203,6 +197,10 @@
 		"**/*.js.map": true,
 		"**/deploy/": true,
 		"**/_misc/": true,
-		"**/dados/": true
+		"**/dados/": true,
+		"**/src/": true,
+		"public/**/app_data/": true,
+		"public/**/dados/": true,
+		"public/imagens/**/perfil/": true
 	}
 }
