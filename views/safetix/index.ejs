@@ -18,7 +18,7 @@
 			<% for (let i = 0; i < eventos.length; i++) { %>
 			<div class="col-sm-4">
 				<div class="festa">
-					<div class="imagem" style="background-image: url(/imagens/sleepover.PNG);"></div>
+					<div class="imagem" style="background-image: url(/imagens/evento/<%= eventos[i].id %>.jpg);"></div>
 					<div class="informacoes">
 						<h4 class="cor-preto" style="padding-left: 10px;"><%= eventos[i].nome %></h4>
 						<h6 class="cor-detalhe" style="margin-top:-20px; padding-left: 10px;">12 ingressos disponiveis</h6>

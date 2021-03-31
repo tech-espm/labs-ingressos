@@ -111,27 +111,53 @@ class Evento {
 		return (lista && lista[0]) || null;
 	}
 
-	public static async criar(e: Evento): Promise<string> {
+	public static async criar(e: Evento, imagem: app.UploadedFile): Promise<string> {
 		let erro: string;
 		if ((erro = Evento.validar(e)))
 			return erro;
 
+		if (!imagem)
+			return "Imagem inválida";
+
+		if (imagem.size < 100)
+			return "Imagem muito pequena";
+
+		if (imagem.size > 524288)
+			return "Imagem não pode ter mais de 500KB";
+
 		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude) values (?,?,?,?,?,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
+
+			const id = await sql.scalar("select last_insert_id()") as number;
+
+			await app.fileSystem.saveUploadedFile("public/imagens/evento/" + id + ".jpg", imagem);
 		});
 
 		return erro;
 	}
 
-	public static async alterar(e: Evento): Promise<string> {
+	public static async alterar(e: Evento, imagem: app.UploadedFile): Promise<string> {
 		let erro: string;
 		if ((erro = Evento.validar(e)))
 			return erro;
 
+		if (imagem) {
+			if (imagem.size < 100)
+				return "Imagem muito pequena";
+
+			if (imagem.size > 524288)
+				return "Imagem não pode ter mais de 500KB";
+		}
+
 		await app.sql.connect(async (sql: app.Sql) => {
 			await sql.query("update evento set endereco = ?, longitude = ?, latitude = ?, horario = ?, nome = ?, datainicial = ?, datafinal = ?, descricao = ? where id = ?", [e.endereco, e.longitude, e.latitude, e.horario, e.nome, e.datafinal, e.datafinal, e.descricao, e.id]);
-			if (!sql.affectedRows)
+			if (!sql.affectedRows) {
 				erro = "Evento não encontrado";
+			} else {
+				if (imagem) {
+					await app.fileSystem.saveUploadedFile("public/imagens/evento/" + e.id + ".jpg", imagem);
+				}
+			}
 		});
 
 		return erro;

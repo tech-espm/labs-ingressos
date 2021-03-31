@@ -42,12 +42,13 @@ class EventoApiRoute {
     }
 
     @app.http.post()
+    @app.route.formData()
     public async criar(req: app.Request, res: app.Response) {
         let erro: string = null;
 
         let evento = req.body as Evento;
 
-        erro = await Evento.criar(evento);
+        erro = await Evento.criar(evento, req.uploadedFiles.imagem);
 
         if(erro){
             res.status(400).json(erro);
@@ -57,12 +58,13 @@ class EventoApiRoute {
     }
 
     @app.http.post()
+    @app.route.formData()
     public async alterar(req: app.Request, res: app.Response) {
         let erro: string = null;
 
         let evento = req.body as Evento;
 
-        erro = await Evento.alterar(evento);
+        erro = await Evento.alterar(evento, req.uploadedFiles.imagem);
 
         if(erro){
             res.status(400).json(erro);
