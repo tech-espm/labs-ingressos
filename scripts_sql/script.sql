@@ -76,6 +76,7 @@ CREATE TABLE evento (
   datafinal datetime NOT NULL,
   horario varchar(40) NOT NULL,
   descricao text NOT NULL,
+  ingressosdisponiveis int NOT NULL,
   endereco varchar(100) NOT NULL,
   latitude float NOT NULL,
   longitude float NOT NULL,

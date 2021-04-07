@@ -27,7 +27,7 @@ class EventoApiRoute {
         if (isNaN(id)) {
             erro = "Id inválido";
         } else {
-            evento = await Evento.obter(id);
+            evento = await Evento.obter(id, true);
 
             if (!evento) {
                 erro = "Evento não encontrado!";

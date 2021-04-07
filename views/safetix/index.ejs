@@ -2,13 +2,13 @@
 	<header class="imagem-fundo"></header>
 	
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row hidden">
 			<div class="col-sm-4" id="divBusca">
 				<!--<input type="text" id="txtBusca" class="form-control" placeholder="Buscar..."/>-->
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Search for...">
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><img src="/imagens/search.png" width="20" style="max-width: 20px;" /></button>
+						<button class="btn btn-default" type="button"><img src="<%- staticRoot %>/imagens/search.png" width="20" style="max-width: 20px;" /></button>
 					</span>
 				</div>
 			</div>
@@ -16,17 +16,17 @@
 
 		<div class="row">
 			<% for (let i = 0; i < eventos.length; i++) { %>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<div class="festa">
-					<div class="imagem" style="background-image: url(/imagens/evento/<%= eventos[i].id %>.jpg);"></div>
+					<div class="imagem" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= eventos[i].id %>.jpg);"></div>
 					<div class="informacoes">
 						<h4 class="cor-preto" style="padding-left: 10px;"><%= eventos[i].nome %></h4>
-						<h6 class="cor-detalhe" style="margin-top:-20px; padding-left: 10px;">12 ingressos disponiveis</h6>
+						<h6 class="cor-detalhe" style="margin-top:-20px; padding-left: 10px;"><%= (eventos[i].ingressosdisponiveis === 0 ? "Nenhum ingresso disponível :(" : (eventos[i].ingressosdisponiveis === 1 ? "Último ingresso disponível!" : (eventos[i].ingressosdisponiveis + " ingressos disponiveis"))) %></h6>
 						<div class="compraHr">
-						<p><hr><a href="<%- root %>/ingressos">comprar</a></p>
+							<hr><a href="<%- root %>/ingressos/<%= eventos[i].id %>">comprar</a>
 						</div>
 						<div class="vendeHr">	
-							<p><a href="<%- root %>/dadosBanca">vender</a><hr></p>
+							<a href="<%- root %>/dadosBanca/<%= eventos[i].id %>">vender</a><hr>
 						</div>
 					</div>
 				</div>
@@ -42,9 +42,11 @@
 	.imagem-fundo {
 		background-image: url(/imagens/festa-fundo-index.png);
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: cover;
+		background-position: center;
 		text-align: center;
 		padding: 150px 0px;
+		margin-bottom: 30px;
 	}
 
 	#divBusca {
@@ -61,12 +63,12 @@
 	.imagem {
 		position: absolute;
 		background-size: contain;
-		background-position: left center;
+		background-position: center;
 		background-repeat: no-repeat;
 		left: 0px;
 		top: 0px;
 		bottom: 0px;
-		right: 120px;
+		right: 200px;
 		background-color: #fff;
 		border-radius: 10px 0px 0px 10px;
 	}
@@ -77,29 +79,36 @@
 		text-align: left;
 		background-color: #fff;
 		height: 170px;
-		width: 120px;
+		width: 200px;
 		border-radius: 0px 10px 10px 0px;
 		padding-top: 5px;
 	}
-	.compraHr{
+
+	.informacoes h4 {
+		text-overflow: ellipsis;
+    	overflow: hidden;
+    	white-space: nowrap;
+		line-height: 1.25;
+	}
+
+	.compraHr {
 		
 		display: flex;
 		align-items: center;
+		padding: 0 10px;
 	}
 
 	.compraHr hr{
-
 		flex:1;
 		border-color:#ff0949;
 		margin-right: 10%;
-		
-
 	}
 
 	.vendeHr{
 
 		display: flex;
 		align-items: center;
+		padding: 0 10px;
 		
 	}
 

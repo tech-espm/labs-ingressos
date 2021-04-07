@@ -1,5 +1,5 @@
 ﻿<div class="limitador">
-	<header class="festa"></header>
+	<header class="festa" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);"></header>
 
 	<div class="container-fluid">
 		<h1>Dados dos Ingressos</h1>
@@ -8,11 +8,8 @@
 			<div class="col-sm-4">
 				<div class="form-group">
 					<label for="nomeFesta">Festa</label>
-					<select id="nomeFesta" class="form-control" size="1">
-						<option value="1">Festa do Branco</option>
-						<option value="2">Festa X</option>
-						<option value="3">Festa Y</option>
-					</select>
+					<input id="nomeFesta" class="form-control" type="text" readonly="readonly" value="<%= evento.nome %>" />
+					<input id="idevento" name="idevento" type="hidden" value="<%= evento.id %>" />
 				</div>
 			</div>
 
@@ -43,25 +40,26 @@
 			<div class="col-sm-4">
 				<div class="form-group">
 					<label for="quantidade">Quantidade</label>
-					<input id="quantidade" class="form-control" type="number" />
+					<input id="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()" onchange="atualizarRecebe()" />
 				</div>
 			</div>
 
 			<div class="col-sm-4">
 				<div class="form-group">
 					<label for="valor">Valor unitário</label>
-					<input id="valor" class="form-control" type="number" />
+					<input id="valor" class="form-control" type="text" onkeyup="atualizarRecebe()" onchange="atualizarRecebe()" />
 				</div>
 			</div>
 
 			<div class="col-sm-4">
 				<div class="form-group">
 					<label for="recebe">Você recebe</label>
-					<input id="recebe" class="form-control" type="number" readonly="readonly" />
+					<input id="recebe" class="form-control" type="text" readonly="readonly" value="0,00" />
 				</div>
 			</div>
 		</div>
 
+		<!--
 		<hr />
 
 		<h1>Seus Dados Bancários</h1>
@@ -105,21 +103,23 @@
 				</div>
 			</div>
 		</div>
+		-->
 
 		<div class="row">
-			<div class="col-sm-3">
-				<label for="você receberá">Anexar comprovante de Ingresso ? </label>
-				<button type="button" class="btn btn-primary btn-block">Buscar</button>
+			<div class="col-sm-12">
+				<div class="form-group">
+					<label>Comprovante de posse do(s) ingresso(s)</label>
+					<button type="button" class="btn btn-primary btn-block">Buscar</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3 col-sm-offset-6">
+				<a href="<%- root %>/" class="btn btn-primary btn-block">Voltar</a>
 			</div>
 
-			<div class="col-sm-3"></div>
-
 			<div class="col-sm-3">
-				<button type="button" class="btn btn-primary btn-block"><a style="color:white" href="<%- root %>/">Voltar</a></button>
-			</div>
-
-			<div class="col-sm-3">
-				<button type="button" class="btn btn-primary btn-block"><a style="color:white" href="<%- root %>/ingressopublicado">Publicar</a></button>
+				<a href="<%- root %>/ingressopublicado" class="btn btn-primary btn-block">Publicar</a>
 			</div>
 		</div>
 	</div>
@@ -130,9 +130,23 @@
 	.festa {
 		background-image: url(/imagens/festa.jpg);
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: cover;
 		background-position: center;
 		text-align: center;
 		padding: 150px 50px;
+		margin-bottom: 30px;
 	}
 </style>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	function atualizarRecebe() {
+		var qtd = parseInt($("#quantidade").val());
+		var valor = parseFloat($("#valor").val().replace(",", "."));
+		var total = 0;
+		if (!isNaN(qtd) && qtd > 0 && !isNaN(valor) && valor > 0) {
+			total = qtd * valor * 0.8;
+		}
+		$("#recebe").val(total.toFixed(2).replace(".", ","));
+	}
+</script>

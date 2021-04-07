@@ -8,6 +8,7 @@ class Evento {
 	public datafinal: string;
 	public horario: string;
 	public descricao: string;
+	public ingressosdisponiveis: number;
     public endereco: string;
     public latitude: number;
     public longitude: number;
@@ -55,7 +56,7 @@ class Evento {
 		let lista: Evento[] = null;
 
 		await app.sql.connect(async (sql: app.Sql) => {
-			lista = (await sql.query("select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento")) as Evento[];
+			lista = (await sql.query("select id, nome, ingressosdisponiveis, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento")) as Evento[];
 		});
 
 		return lista || [];
@@ -68,7 +69,7 @@ class Evento {
 			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html
 			// https://dev.mysql.com/doc/refman/8.0/en/fulltext-natural-language.html
 
-			let query = "select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento ";
+			let query = "select id, nome, ingressosdisponiveis, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, endereco, latitude, longitude from evento ";
 			let parametros: string[] = [];
 			let temWhere = false;
 
@@ -101,11 +102,15 @@ class Evento {
 		return lista || [];
 	}
 
-	public static async obter(id: number): Promise<Evento> {
+	public static async obter(id: number, dataISO: boolean): Promise<Evento> {
 		let lista: Evento[] = null;
 
 		await app.sql.connect(async (sql: app.Sql) => {
-			lista = (await sql.query("select id, nome, date_format(datainicial, '%Y-%m-%d') datainicial, date_format(datafinal, '%Y-%m-%d') datafinal, horario, descricao, endereco, latitude, longitude from evento where id = ?", [id])) as Evento[];
+			lista = (await sql.query(
+				dataISO ?
+				"select id, nome, date_format(datainicial, '%Y-%m-%d') datainicial, date_format(datafinal, '%Y-%m-%d') datafinal, horario, descricao, ingressosdisponiveis, endereco, latitude, longitude from evento where id = ?" :
+				"select id, nome, date_format(datainicial, '%d/%m/%Y') datainicial, date_format(datafinal, '%d/%m/%Y') datafinal, horario, descricao, ingressosdisponiveis, endereco, latitude, longitude from evento where id = ?"
+				, [id])) as Evento[];
 		});
 		
 		return (lista && lista[0]) || null;
@@ -126,7 +131,7 @@ class Evento {
 			return "Imagem não pode ter mais de 500KB";
 
 		await app.sql.connect(async (sql: app.Sql) => {
-			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, endereco, latitude, longitude) values (?,?,?,?,?,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
+			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, ingressosdisponiveis, endereco, latitude, longitude) values (?,?,?,?,?,0,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
 
 			const id = await sql.scalar("select last_insert_id()") as number;
 
@@ -161,6 +166,10 @@ class Evento {
 		});
 
 		return erro;
+	}
+
+	public static async atualizarIngressosDisponiveis(sql: app.Sql, id: number): Promise<void> {
+		await sql.query("update evento set ingressosdisponiveis = (select count(*) from ingresso where idevento = ? and idpedido = 0) where id = ?", [id, id]);
 	}
 
 	public static async excluir(id: number): Promise<string> {

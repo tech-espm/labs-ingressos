@@ -2,7 +2,7 @@
 import Usuario = require("../models/usuario");
 import Evento = require("../models/evento");
 
-class HomeRoute {
+class IndexRoute {
 	public async index(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/index", {
@@ -82,51 +82,93 @@ class HomeRoute {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/cadastro", { layout: "layout-safetix", usuario: u });
 	}
-	
+
+	@app.route.methodName("dadosBanca/:id")
 	public async dadosBanca(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
-		res.render("safetix/dadosBanca", { layout: "layout-safetix", usuario: u });
+
+		if (!u) {
+			res.redirect(app.root + "/login");
+			return;
+		}
+
+		let evento = await Evento.obter(parseInt(req.params["id"]), false);
+
+		if (!evento) {
+			res.render("shared/erro", {
+				layout: "layout-externo",
+				mensagem: "Evento não encontrado"
+			});
+			return;
+		}
+
+		res.render("safetix/dadosBanca", {
+			layout: "layout-safetix",
+			evento: evento,
+			usuario: u
+		});
 	}
-	
+
 	public async perfilexterno(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/pagina-usuario", { layout: "layout-safetix", usuario: u });
 	}
-	
+
 	public async pagamento(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/pagamento", { layout: "layout-safetix", usuario: u });
 	}
-	
+
+	@app.route.methodName("ingressos/:id")
 	public async ingressos(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
-		res.render("safetix/ingressos", { layout: "layout-safetix", usuario: u });
+
+		if (!u) {
+			res.redirect(app.root + "/login");
+			return;
+		}
+
+		let evento = await Evento.obter(parseInt(req.params["id"]), false);
+
+		if (!evento) {
+			res.render("shared/erro", {
+				layout: "layout-externo",
+				mensagem: "Evento não encontrado"
+			});
+			return;
+		}
+
+		res.render("safetix/ingressos", {
+			layout: "layout-safetix",
+			evento: evento,
+			usuario: u
+		});
 	}
-	
+
 	public async carrinho(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/carrinho", { layout: "layout-safetix", usuario: u });
 	}
-	
+
 	public async ajuda(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/ajuda", { layout: "layout-safetix", usuario: u });
 	}
-	
+
 	public async quemsomos(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/quemsomos", { layout: "layout-safetix", usuario: u });
 	}
-	
+
 	public async confirmacaopagamento(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/confirmacaopagamento", { layout: "layout-safetix", usuario: u });
 	}
-	
+
 	public async ingressopublicado(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
 		res.render("safetix/ingressopublicado", { layout: "layout-safetix", usuario: u });
 	}
 }
 
-export = HomeRoute;
+export = IndexRoute;

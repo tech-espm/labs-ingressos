@@ -1,11 +1,11 @@
-<header class="imagem-fundo"></header>
-
 <div class="limitador">
+	<header class="imagem-fundo" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);"></header>
+
 	<div class="fundo-horario">
         <div class="row">
             <div class="col-xs-10">
-                <h3 class="cor-branco">12/09/2020 17h até 13/09/2020 17h</h3>
-                <h3 class="cor-branco">Complexo Canindé</h3>
+                <h3 class="cor-branco"><%= evento.datainicial %> às <%= evento.horario %> até <%= evento.datafinal %> às <%= evento.horario %></h3>
+                <h3 class="cor-branco"><%= evento.nome %></h3>
             </div>
             <div class="col-xs-2 text-right">
                 <a class="cor-branco" href="#" data-toggle="modal" data-target="#modalComprar">Ver +</a>
@@ -163,12 +163,12 @@
 <%- contentFor("styles") %>
 <style type="text/css">
 	.imagem-fundo {
-		background-image: url(/imagens/sleepover-ingresso.png);
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: cover;
 		background-position: center;
 		text-align: center;
 		padding: 150px 0px;
+		margin-bottom: 30px;
 	}
 	.fundo-horario {
 		border-radius: 100px;

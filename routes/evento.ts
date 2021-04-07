@@ -20,7 +20,7 @@ class EventoRoute {
 		} else {
 			let id = parseInt(req.query["id"] as string);
 			let item: Evento = null;
-			if (isNaN(id) || !(item = await Evento.obter(id)))
+			if (isNaN(id) || !(item = await Evento.obter(id, true)))
 				res.render("home/nao-encontrado", { usuario: u });
 			else
 				res.render("evento/alterar", { titulo: "Editar Evento", usuario: u, item: item });
