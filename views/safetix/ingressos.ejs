@@ -1,5 +1,5 @@
 <div class="limitador">
-	<header class="imagem-fundo" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);"></header>
+	<header class="imagem-fundo" style="background-image: url('<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg');"></header>
 
 	<div class="fundo-horario">
         <div class="row">
@@ -183,7 +183,6 @@
 		background-color: #fff;
 		height: 120px;
 		float: left;
-		margin-left: 10px;
 		margin-top: 20px;
 	}
 	.informacao-esquerda {
@@ -194,6 +193,7 @@
 	}
 	.informacao-direita {
 		width: 150px;
+		margin-right: 20px;
 		border-radius: 0px 10px 10px 0px;
 	}
 	.cor-branco{
