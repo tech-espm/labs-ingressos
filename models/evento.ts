@@ -131,11 +131,15 @@ class Evento {
 			return "Imagem não pode ter mais de 500KB";
 
 		await app.sql.connect(async (sql: app.Sql) => {
+			await sql.beginTransaction();
+
 			await sql.query("insert into evento (nome, datainicial, datafinal, horario, descricao, ingressosdisponiveis, endereco, latitude, longitude) values (?,?,?,?,?,0,?,?,?)", [e.nome, e.datainicial, e.datafinal, e.horario, e.descricao, e.endereco, e.latitude, e.longitude]);
 
 			const id = await sql.scalar("select last_insert_id()") as number;
 
 			await app.fileSystem.saveUploadedFile("public/imagens/evento/" + id + ".jpg", imagem);
+
+			await sql.commit();
 		});
 
 		return erro;
@@ -155,7 +159,10 @@ class Evento {
 		}
 
 		await app.sql.connect(async (sql: app.Sql) => {
+			await sql.beginTransaction();
+
 			await sql.query("update evento set endereco = ?, longitude = ?, latitude = ?, horario = ?, nome = ?, datainicial = ?, datafinal = ?, descricao = ? where id = ?", [e.endereco, e.longitude, e.latitude, e.horario, e.nome, e.datafinal, e.datafinal, e.descricao, e.id]);
+
 			if (!sql.affectedRows) {
 				erro = "Evento não encontrado";
 			} else {
@@ -163,6 +170,8 @@ class Evento {
 					await app.fileSystem.saveUploadedFile("public/imagens/evento/" + e.id + ".jpg", imagem);
 				}
 			}
+
+			await sql.commit();
 		});
 
 		return erro;
