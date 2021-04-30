@@ -80,6 +80,12 @@ img {
 	max-width: 1000px;
 }
 
+.limitador-400 {
+	margin: 0 auto;
+	max-width: 400px;
+	text-align: left;
+}
+
 .fundo-destaque {
 	background-color: #1a1a1a;
 }
@@ -105,4 +111,69 @@ a.alternativo:hover {
 	.navbar-nav>li + li {
 		margin: 0 0 0 4px;
 	}
+}
+
+.alert-notification {
+	border: 0;
+	margin: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	position: fixed;
+	left: 2.5%;
+	top: 0;
+	right: 2.5%;
+	z-index: 10000; /* Bootstrap goes up to 1100 */
+	opacity: 0;
+	-webkit-transition: all ease-in-out .2s;
+	-o-transition: all ease-in-out .2s;
+	transition: all ease-in-out .2s;
+	-webkit-box-shadow: 0 0 12px rgba(0,0,0,.55);
+	box-shadow: 0 0 12px rgba(0,0,0,.55);
+}
+
+	.alert-notification.alert-success {
+		color: #000;
+		background: #5e5; /*#3d3;*/
+	}
+
+	.alert-notification.alert-info {
+		color: #000;
+		background: #8df; /*#4bf;*/
+	}
+
+	.alert-notification.alert-warning {
+		color: #000;
+		background: #fc0;
+	}
+
+	.alert-notification.alert-danger {
+		color: #000;
+		background: #f99; /*#f77;*/
+	}
+
+	.alert-notification.alert-default {
+		color: #000;
+		background: #f5f5f5;
+	}
+
+.alert-notification-shown {
+	opacity: 1;
+}
+
+.alert-notification-gone {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.alert-notification {
+		left: 25%;
+		right: 25%;
+	}
+}
+
+.divider-body {
+	height: 1px;
+	margin: 30px 10px;
+	overflow: hidden;
+	background-color: #e5e5e5;
 }

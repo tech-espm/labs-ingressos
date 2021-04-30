@@ -55,10 +55,13 @@ class IndexRoute {
 	
 	public async perfil(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);
-		if (!u || !u.admin)
+		if (!u)
 			res.redirect(app.root + "/");
 		else
-			res.render("home/perfil", { titulo: "Meu Perfil", usuario: u });
+			res.render("home/perfil", {
+				titulo: "Meu Perfil",
+				usuario: await Usuario.obter(u.id)
+			});
 	}
 	
 	public async logout(req: app.Request, res: app.Response) {

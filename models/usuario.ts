@@ -133,13 +133,27 @@ class Usuario {
 		});
 	}
 
-	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string, imagemPerfil: string): Promise<string> {
+	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string, imagemPerfil: string, nascimento?: string | null, telefone?: string | null, faculdade?: string | null): Promise<string> {
 		nome = (nome || "").normalize().trim();
 		if (nome.length < 3 || nome.length > 100)
 			return "Nome inválido";
 
 		if (!!senhaAtual !== !!novaSenha || (novaSenha && novaSenha.length > 40))
 			return "Senha inválida";
+
+		if (nascimento && telefone && faculdade) {
+			nascimento = converterDataISO(nascimento);
+			if (!nascimento)
+				return "Data de nascimento inválida";
+
+			telefone = (telefone || "").normalize().trim();
+			if (telefone.length < 3 || telefone.length > 30)
+				return "Telefone inválido";
+
+			faculdade = (faculdade || "").normalize().trim();
+			if (faculdade.length < 3 || faculdade.length > 50)
+				return "Faculdade inválida";
+		}
 
 		let r: string = null;
 
@@ -155,13 +169,19 @@ class Usuario {
 
 				let [token, cookieStr] = Usuario.gerarTokenCookie(this.id);
 
-				await sql.query("update usuario set nome = ?, senha = ?, token = ? where id = ?", [nome, hash, token, this.id]);
+				if (nascimento && telefone && faculdade)
+					await sql.query("update usuario set nome = ?, senha = ?, token = ?, nascimento = ?, telefone = ?, faculdade = ? where id = ?", [nome, hash, token, nascimento, telefone, faculdade, this.id]);
+				else
+					await sql.query("update usuario set nome = ?, senha = ?, token = ? where id = ?", [nome, hash, token, this.id]);
 
 				this.nome = nome;
 
 				res.cookie(appsettings.cookie, cookieStr, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/", secure: appsettings.cookieSecure });
 			} else {
-				await sql.query("update usuario set nome = ? where id = ?", [nome, this.id]);
+				if (nascimento && telefone && faculdade)
+					await sql.query("update usuario set nome = ?, nascimento = ?, telefone = ?, faculdade = ? where id = ?", [nome, nascimento, telefone, faculdade, this.id]);
+				else
+					await sql.query("update usuario set nome = ? where id = ?", [nome, this.id]);
 
 				this.nome = nome;
 			}
@@ -234,7 +254,7 @@ class Usuario {
 		let lista: Usuario[] = null;
 
 		await app.sql.connect(async (sql: app.Sql) => {
-			lista = await sql.query("select id, login, nome, idperfil, versao, idtermouso, date_format(nascimento, '%d/%m/%Y') nascimento, telefone, faculdade, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
+			lista = await sql.query("select id, login, nome, idperfil, versao, idtermouso, date_format(nascimento, '%Y-%m-%d') nascimento, telefone, faculdade, date_format(criacao, '%Y-%m-%d') criacao from usuario where id = ?", [id]) as Usuario[];
 		});
 
 		return ((lista && lista[0]) || null);

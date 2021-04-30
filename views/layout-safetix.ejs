@@ -14,6 +14,15 @@
 		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/jquery-validate-1.0.3.min.js"></script>
 		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/messages_pt_BR.min.js"></script>
 		<script type="text/javascript" src="<%- root %>/js/main-1.0.10.js"></script>
+		<script type="text/javascript">
+			//<![CDATA[
+			"use strict";
+			Notification.pathBase = "<%- root %>/";
+			Notification.imagePath = "imagens";
+			//]]>
+		</script>
+
+		<script type="text/javascript" src="<%- root %>/js/utils-1.0.0.js"></script>
 
 		<%- defineContent("styles") %>
 	</head>

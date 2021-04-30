@@ -8,7 +8,7 @@ class UsuarioApiRoute {
 		let u = await Usuario.cookie(req, res);
 		if (!u)
 			return;
-		jsonRes(res, 400, await u.alterarPerfil(res, req.body.nome as string, req.body.senhaAtual as string, req.body.novaSenha as string, req.body.imagemPerfil as string));
+		jsonRes(res, 400, await u.alterarPerfil(res, req.body.nome, req.body.senhaAtual, req.body.novaSenha, req.body.imagemPerfil, req.body.nascimento, req.body.telefone, req.body.faculdade));
 	}
 
 	public async listar(req: app.Request, res: app.Response) {
