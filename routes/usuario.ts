@@ -26,6 +26,19 @@ class UsuarioRoute {
 				res.render("usuario/alterar", { titulo: "Editar Usuário", usuario: u, item: item, perfis: await Perfil.listar() });
 		}
 	}
+	public async editar(req: app.Request, res: app.Response) {
+        let u = await Usuario.cookie(req);
+        if (!u) {
+            res.redirect(app.root + "/acesso");
+        } else {
+            let id = parseInt(req.query["id"] as string);
+            let item: Usuario = null;
+            if (isNaN(id) || !(item = await Usuario.obter(id)))
+                res.render("home/nao-encontrado", { usuario: u });
+            else
+                res.render("safetix/editar", { titulo: "Editar Usuário", usuario: u, item: item, perfis: await Perfil.listar() });
+        }
+    }
 
 	public async listar(req: app.Request, res: app.Response) {
 		let u = await Usuario.cookie(req);

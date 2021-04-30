@@ -1,0 +1,164 @@
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Editar Perfil</div>
+			<div class="panel-body no-bottom">
+				<div class="form-group">
+					<label for="login">Login</label>
+					<input id="login" name="login" class="form-control" type="text" spellcheck="false" readonly="readonly" value="<%=usuario.login %>" />
+				</div>
+				<div class="form-group">
+					<label for="nome">Nome</label>
+					<input id="nome" name="nome" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=usuario.nome %>" />
+				</div>
+
+				<div class="divider-body"></div>
+
+				<div class="form-group">
+					<label for="imagemPerfil">Nova Imagem de Perfil <small>(Até 1 MiB, de preferência quadrada)</small></label>
+					<input id="imagemPerfil" name="imagemPerfil" class="form-control" type="file" accept="image/jpeg" />
+				</div>
+
+				<div class="divider-body"></div>
+
+				<p>Para alterar a senha atual, preencha todos os campos abaixo</p>
+				<div class="form-group">
+					<label for="senhaAtual">Senha atual</label>
+					<input id="senhaAtual" name="senhaAtual" maxlength="20" class="form-control" type="password" />
+				</div>
+				<div class="form-group">
+					<label for="novaSenha">Nova senha</label>
+					<input id="novaSenha" name="novaSenha" maxlength="20" class="form-control" type="password" />
+				</div>
+				<div class="form-group">
+					<label for="novaSenha2">Confirme a nova senha</label>
+					<input id="novaSenha2" name="novaSenha2" maxlength="20" class="form-control" type="password" />
+				</div>
+			</div>
+			<div class="panel-footer">
+				<input value="Salvar Alterações" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	var ajustandoImagem = false;
+
+	$("#form").validate({
+		rules: {
+			nome: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			},
+			imagemPerfil: {
+				advancedFileSupport: true,
+				maxFileLengthKiB: 1024,
+				fileExtension: ".jpg"
+			},
+			senhaAtual: {
+				maxlength: 20,
+				required: {
+					depends: function (element) {
+						return !!$("#novaSenha").val();
+					}
+				}
+			},
+			novaSenha: {
+				maxlength: 20,
+				required: {
+					depends: function (element) {
+						return !!$("#senhaAtual").val();
+					}
+				}
+			},
+			novaSenha2: {
+				equalTo: "#novaSenha"
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active || ajustandoImagem)
+				return;
+
+			var imagemPerfil = document.getElementById("imagemPerfil"),
+				arquivo = (imagemPerfil.files && imagemPerfil.files[0]), erroImagem, ultimoPasso, prepararImagem;
+
+			Notification.wait();
+
+			erroImagem = function (erro) {
+				ajustandoImagem = false;
+				Notification.error("Ocorreu um erro durante o processamento da imagem " + emoji.sad, true);
+			};
+
+			ultimoPasso = function (imagem) {
+				var obj = {
+					nome: document.getElementById("nome").value,
+					senhaAtual: document.getElementById("senhaAtual").value,
+					novaSenha: document.getElementById("novaSenha").value,
+					imagemPerfil: imagem
+				};
+
+				JsonWebApi.post("<%- root %>/api/usuario/alterarPerfil", obj, function (response) {
+					if (response.success)
+						Notification.success("Perfil alterado com sucesso! " + emoji.happy);
+					else
+						Notification.error(response.value, true);
+				});
+			};
+
+			prepararImagem = function (arquivo) {
+				var reader = new FileReader();
+				reader.onload = function () {
+					var imagem = new Image();
+					imagem.onload = function () {
+						var w = imagem.width, h = imagem.height, cw = 300, ch = 300,
+							canvas = document.createElement("canvas"), context;
+
+						canvas.width = cw;
+						canvas.height = ch;
+
+						context = canvas.getContext("2d", { alpha: false });
+
+						try {
+							if (("imageSmoothingEnabled" in context))
+								context.imageSmoothingEnabled = true;
+							if (("imageSmoothingQuality" in context))
+								context.imageSmoothingQuality = "high";
+						} catch (ex) {
+							// Apenas ignora...
+						}
+
+						// Faz com que a imagem cubra a área inteira, removendo os excessos laterais/verticais
+						if ((cw / ch) > (w / h)) {
+							h = (((h * cw) / w) + 0.5) | 0;
+							w = cw;
+						} else {
+							w = (((w * ch) / h) + 0.5) | 0;
+							h = ch;
+						}
+
+						context.drawImage(imagem, 0, 0, imagem.width, imagem.height, (cw - w) >> 1, (ch - h) >> 1, w, h);
+
+						ultimoPasso(canvas.toDataURL("image/jpeg", 0.9));
+					};
+					imagem.onerror = erroImagem;
+					imagem.src = reader.result;
+				};
+				reader.onerror = erroImagem;
+				reader.readAsDataURL(arquivo);
+			};
+
+			if (arquivo)
+				prepararImagem(arquivo);
+			else
+				ultimoPasso(null);
+		}
+	});
+	//]]>
+</script>
