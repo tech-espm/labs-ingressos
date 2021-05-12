@@ -203,7 +203,7 @@ class Usuario {
 					this.versao++;
 
 					await sql.query("update usuario set versao = ? where id = ?", [this.versao, this.id]);
-				} catch (ex) {
+				} catch (e) {
 					r = (senhaAtual ? "A senha foi alterada com sucesso, mas ocorreu um erro ao gravar a imagem de perfil" : "Erro ao gravar a imagem de perfil");
 					return;
 				}

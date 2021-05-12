@@ -3,13 +3,13 @@ USE ingressos;
 
 -- DROP TABLE IF EXISTS perfil;
 CREATE TABLE perfil (
-  id int NOT NULL AUTO_INCREMENT,
+  id int NOT NULL,
   nome varchar(50) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY perfil_nome_UN (nome)
 );
 
-INSERT INTO perfil (nome) VALUES ('Administrador'), ('Comum');
+INSERT INTO perfil (id, nome) VALUES (1, 'Administrador'), (2, 'Comum');
 
 -- DROP TABLE IF EXISTS termouso;
 CREATE TABLE termouso (
@@ -97,21 +97,52 @@ CREATE TABLE pedido (
   CONSTRAINT pedido_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
--- DROP TABLE IF EXISTS ingresso;
-CREATE TABLE ingresso (
+CREATE TABLE ingresso_tipo (
+  id int NOT NULL,
+  nome varchar(50) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO ingresso_tipo (id, nome) VALUES (1, 'Inteira'), (2, 'Meia'), (3, 'Meia Universidade');
+
+CREATE TABLE ingresso_setor (
+  id int NOT NULL,
+  nome varchar(50) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO ingresso_setor (id, nome) VALUES (1, 'Pista'), (2, 'Área Vip'), (3, 'Camarote');
+
+CREATE TABLE ingresso_venda (
   id bigint NOT NULL AUTO_INCREMENT,
-  tipo varchar(50) NOT NULL,
-  valor float NOT NULL,
   idevento int NOT NULL,
   idusuario int NOT NULL,
+  idtipo int NOT NULL,
+  idsetor int NOT NULL,
+  data datetime NOT NULL,
+  PRIMARY KEY (id),
+  KEY ingresso_venda_idevento_idusuario_FK_idx (idevento, idusuario),
+  KEY ingresso_venda_idusuario_FK_idx (idusuario),
+  KEY ingresso_venda_idtipo_FK_idx (idtipo),
+  KEY ingresso_venda_idsetor_FK_idx (idsetor),
+  CONSTRAINT ingresso_venda_idevento_FK FOREIGN KEY (idevento) REFERENCES evento (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT ingresso_venda_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT ingresso_venda_idtipo_FK FOREIGN KEY (idtipo) REFERENCES ingresso_tipo (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT ingresso_venda_idsetor_FK FOREIGN KEY (idsetor) REFERENCES ingresso_setor (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE ingresso (
+  id bigint NOT NULL AUTO_INCREMENT,
+  idevento int NOT NULL,
   idpedido bigint NOT NULL,
-  emaildestino varchar(100) NULL,
+  idvenda bigint NOT NULL,
+  valor float NOT NULL,
   emailenviado tinyint(4) NOT NULL,
   emailrecebido tinyint(4) NOT NULL,
   PRIMARY KEY (id),
-  KEY ingresso_idevento_idevento_FK_idx (idevento, idpedido),
-  KEY ingresso_idusuario_FK_idx (idusuario),
+  KEY ingresso_idevento_idpedido_FK_idx (idevento, idpedido),
   KEY ingresso_idpedido_FK_idx (idpedido),
+  KEY ingresso_idvenda_FK_idx (idvenda),
   CONSTRAINT ingresso_idevento_FK FOREIGN KEY (idevento) REFERENCES evento (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT ingresso_idusuario_FK FOREIGN KEY (idusuario) REFERENCES usuario (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT ingresso_idvenda_FK FOREIGN KEY (idvenda) REFERENCES ingresso_venda (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );

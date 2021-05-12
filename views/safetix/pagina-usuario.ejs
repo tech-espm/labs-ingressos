@@ -1,5 +1,9 @@
 <main class="limitador text-center">
-	<i class="fa fa-user fa-5x" aria-hidden="true"></i>
+	<% if (usuario && usuario.versao) { %>
+		<img style="border-radius: 9999px;" alt="Imagem de Perfil" src="<%- root %>/imagens/perfil/<%-(usuario.id + '.jpg?' + usuario.versao) %>" width="80" height="80" />
+	<% } else { %>
+		<i class="fa fa-user fa-5x" aria-hidden="true"></i>
+	<% } %>
 	<h1>Usuário</h1>
 	<div class="lista-compacta">
 		

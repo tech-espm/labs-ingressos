@@ -2,10 +2,9 @@
 	<header class="festa" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);">
 	</header>
 	
-
 	<div class="container-fluid">
 		<h1>Dados dos Ingressos</h1>
-		<form>
+		<form enctype="multipart/form-data">
 			<div class="row">
 				<div class="col-sm-4">
 					<div class="form-group">
@@ -18,22 +17,22 @@
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						<label for="tipoIngresso">Tipo de ingresso</label>
-						<select id="tipo" name="tipo" class="form-control" size="1">
-							<option value="inteira">Inteira</option>
-							<option value="meia escolar">Meia</option>
-							<option value="meia universidade">Meia Universidade</option>
+						<label for="idtipo">Tipo de ingresso</label>
+						<select id="idtipo" name="idtipo" class="form-control" size="1">
+							<option value="1">Inteira</option>
+							<option value="2">Meia</option>
+							<option value="3">Meia Universidade</option>
 						</select>
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
-						<label for="setor">Setor</label>
-						<select id="setor" name="setor" class="form-control" size="1">
-							<option value="pista">Pista</option>
-							<option value="área vip">Área Vip</option>
-							<option value="camarote">Camarote</option>
+						<label for="idsetor">Setor</label>
+						<select id="idsetor" name="idsetor" class="form-control" size="1">
+							<option value="1">Pista</option>
+							<option value="2">Área Vip</option>
+							<option value="3">Camarote</option>
 						</select>
 					</div>
 				</div>
@@ -51,15 +50,14 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						<label for="valor">Valor unitário</label>
-						<input id="valor" name="valor" class="form-control" type="text" onkeyup="atualizarRecebe()"
-							onchange="atualizarRecebe()" />
+						<input id="valor" name="valor" class="form-control" type="text" onkeyup="atualizarRecebe()" onchange="atualizarRecebe()" />
 					</div>
 				</div>
 
 				<div class="col-sm-4">
 					<div class="form-group">
 						<label for="recebe">Você recebe</label>
-						<input id="recebe" name="recebe" class="form-control" type="text" readonly="readonly" value="0,00" />
+						<input id="recebe" class="form-control" type="text" readonly="readonly" value="0,00" />
 					</div>
 				</div>
 			</div>
@@ -114,7 +112,7 @@
 				<div class="col-sm-12">
 					<div class="form-group">
 						<label>Comprovante de posse do(s) ingresso(s)</label>
-						<button type="button" class="btn btn-primary btn-block">Buscar</button>
+						<input type="file" id="comprovante" name="comprovante" accept="image/jpeg" class="form-control" />
 					</div>
 				</div>
 			</div>
@@ -173,13 +171,15 @@
 						return;
 					}
 					$.ajax({
-						url: "<%- root %>/api/ingresso/criar",
+						url: "<%- root %>/api/venda/criar",
 						method: "POST",
-						data: $(form).serialize(),
+						data: new FormData(form),
+						contentType: false,
+						processData: false,
 
 						success: function (dadosDeRetorno) {
 							form.reset();
-							alert("Ingresso criado com sucesso! Id: " + dadosDeRetorno);
+							alert("Ingresso(s) criado(s) com sucesso!");
 						},
 
 						error: function (xhr) {
