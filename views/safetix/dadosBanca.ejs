@@ -1,65 +1,69 @@
 ﻿<div class="limitador">
-	<header class="festa" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);"></header>
+	<header class="festa" style="background-image: url(<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg);">
+	</header>
 
 	<div class="container-fluid">
 		<h1>Dados dos Ingressos</h1>
+		<form>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="nomeFesta">Festa</label>
+						<input id="nomeFesta" class="form-control" type="text" readonly="readonly"
+							value="<%= evento.nome %>" />
+						<input id="idevento" name="idevento" type="hidden" value="<%= evento.id %>" />
+					</div>
+				</div>
 
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="nomeFesta">Festa</label>
-					<input id="nomeFesta" class="form-control" type="text" readonly="readonly" value="<%= evento.nome %>" />
-					<input id="idevento" name="idevento" type="hidden" value="<%= evento.id %>" />
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="tipoIngresso">Tipo de ingresso</label>
+						<select id="tipo" name="tipo" class="form-control" size="1">
+							<option value="inteira">Inteira</option>
+							<option value="meia escolar">Meia</option>
+							<option value="meia universidade">Meia Universidade</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="setor">Setor</label>
+						<select id="setor" name="setor" class="form-control" size="1">
+							<option value="pista">Pista</option>
+							<option value="área vip">Área Vip</option>
+							<option value="camarote">Camarote</option>
+						</select>
+					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="tipoIngresso">Tipo de ingresso</label>
-					<select id="tipoIngresso" class="form-control" size="1">
-						<option value="inteira">Inteira</option>
-						<option value="meia escolar">Meia</option>
-						<option value="meia universidade">Meia Universidade</option>
-					</select>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="quantidade">Quantidade</label>
+						<input id="quantidade" name="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()"
+							onchange="atualizarRecebe()" />
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="valor">Valor unitário</label>
+						<input id="valor" name="valor" class="form-control" type="text" onkeyup="atualizarRecebe()"
+							onchange="atualizarRecebe()" />
+					</div>
+				</div>
+
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="recebe">Você recebe</label>
+						<input id="recebe" name="recebe" class="form-control" type="text" readonly="readonly" value="0,00" />
+					</div>
 				</div>
 			</div>
 
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="setor">Setor</label>
-					<select id="setor" class="form-control" size="1">
-						<option value="pista">Pista</option>
-						<option value="área vip">Área Vip</option>
-						<option value="camarote">Camarote</option>
-					</select>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="quantidade">Quantidade</label>
-					<input id="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()" onchange="atualizarRecebe()" />
-				</div>
-			</div>
-
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="valor">Valor unitário</label>
-					<input id="valor" class="form-control" type="text" onkeyup="atualizarRecebe()" onchange="atualizarRecebe()" />
-				</div>
-			</div>
-
-			<div class="col-sm-4">
-				<div class="form-group">
-					<label for="recebe">Você recebe</label>
-					<input id="recebe" class="form-control" type="text" readonly="readonly" value="0,00" />
-				</div>
-			</div>
-		</div>
-
-		<!--
+			<!--
 		<hr />
 
 		<h1>Seus Dados Bancários</h1>
@@ -105,48 +109,89 @@
 		</div>
 		-->
 
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="form-group">
-					<label>Comprovante de posse do(s) ingresso(s)</label>
-					<button type="button" class="btn btn-primary btn-block">Buscar</button>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label>Comprovante de posse do(s) ingresso(s)</label>
+						<button type="button" class="btn btn-primary btn-block">Buscar</button>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-3 col-sm-offset-6">
-				<a href="<%- root %>/" class="btn btn-primary btn-block">Voltar</a>
-			</div>
+			<div class="row">
+				<div class="col-sm-3 col-sm-offset-6">
+					<a href="<%- root %>/" class="btn btn-primary btn-block">Voltar</a>
+				</div>
 
-			<div class="col-sm-3">
-				<a href="<%- root %>/ingressopublicado" class="btn btn-primary btn-block">Publicar</a>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-primary btn-block">Publicar</button>
+				</div>
 			</div>
-		</div>
 	</div>
 </div>
-
+</form>
 <%- contentFor("styles") %>
-<style type="text/css">
-	.festa {
-		background-image: url(/imagens/festa.jpg);
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center;
-		text-align: center;
-		padding: 150px 50px;
-		margin-bottom: 30px;
-	}
-</style>
-
-<%- contentFor("scripts") %>
-<script type="text/javascript">
-	function atualizarRecebe() {
-		var qtd = parseInt($("#quantidade").val());
-		var valor = parseFloat($("#valor").val().replace(",", "."));
-		var total = 0;
-		if (!isNaN(qtd) && qtd > 0 && !isNaN(valor) && valor > 0) {
-			total = qtd * valor * 0.8;
+	<style type="text/css">
+		.festa {
+			background-image: url(/imagens/festa.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			text-align: center;
+			padding: 150px 50px;
+			margin-bottom: 30px;
 		}
-		$("#recebe").val(total.toFixed(2).replace(".", ","));
-	}
-</script>
+	</style>
+
+	<%- contentFor("scripts") %>
+		<script type="text/javascript">
+			function atualizarRecebe() {
+				var qtd = parseInt($("#quantidade").val());
+				var valor = parseFloat($("#valor").val().replace(",", "."));
+				var total = 0;
+				if (!isNaN(qtd) && qtd > 0 && !isNaN(valor) && valor > 0) {
+					total = qtd * valor * 0.8;
+				}
+				$("#recebe").val(total.toFixed(2).replace(".", ","));
+			}
+			$("form").validate({
+				rules: {
+					// Para quase tudo existem duas, três ou mais formas de fazer a mesma coisa...! :)
+					nome: {
+						quantidade: true,
+						minlength: 1
+					},
+					//email: {
+					//	required: true,
+					//	maxlength: 50,
+					//	email: true
+					//}
+				},
+
+				submitHandler: function (form) {
+					if ($.active) {
+						return;
+					}
+					$.ajax({
+						url: "<%- root %>/api/ingresso/criar",
+						method: "POST",
+						data: $(form).serialize(),
+
+						success: function (dadosDeRetorno) {
+							form.reset();
+							alert("Ingresso criado com sucesso! Id: " + dadosDeRetorno);
+						},
+
+						error: function (xhr) {
+							try {
+								// Tentar converter a resposta em um JSON
+								alert(JSON.parse(xhr.responseText));
+							} catch (excecao) {
+								// Se não foi possível converter a resposta em JSON,
+								// apenas ignora e mostra a mensagem de erro padrão
+								alert("Algo deu errado :(");
+							}
+						}
+					});
+				}
+			})
+		</script>

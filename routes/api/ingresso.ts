@@ -19,6 +19,7 @@ class IngressoApiRoute {
 
     @app.http.post()
     public async criar(req: app.Request, res: app.Response) {
+    
         let erro: string = null;
 
         let ingresso = req.body as Ingresso;

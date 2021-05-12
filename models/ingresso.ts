@@ -15,7 +15,7 @@ class Ingresso {
 	private static validar(i: Ingresso): string {
 		if (!i)
 			return "Ingresso inválido";
-
+		
 		i.tipo = (i.tipo || "").normalize().trim();
 		if (i.tipo.length < 3 || i.tipo.length > 50)
 			return "Tipo inválido";
