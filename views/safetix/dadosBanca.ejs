@@ -42,8 +42,7 @@
 				<div class="col-sm-4">
 					<div class="form-group">
 						<label for="quantidade">Quantidade</label>
-						<input id="quantidade" name="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()"
-							onchange="atualizarRecebe()" />
+						<input id="quantidade" name="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()" min="1" max="999" onchange="atualizarRecebe()" />
 					</div>
 				</div>
 
@@ -118,11 +117,15 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-3 col-sm-offset-6">
-					<a href="<%- root %>/" class="btn btn-primary btn-block">Voltar</a>
+					<div class="form-group">
+						<a href="<%- root %>/" class="btn btn-primary btn-block">Voltar</a>
+					</div>
 				</div>
 
 				<div class="col-sm-3">
-					<button type="submit" class="btn btn-primary btn-block">Publicar</button>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary btn-block col-xs-space-bottom">Publicar</button>
+					</div>
 				</div>
 			</div>
 	</div>
@@ -155,21 +158,27 @@
 			$("form").validate({
 				rules: {
 					// Para quase tudo existem duas, três ou mais formas de fazer a mesma coisa...! :)
-					nome: {
-						quantidade: true,
-						minlength: 1
+					quantidade: {
+						required: true,
+						number: true,
+						min: 1,
+						max: 999
 					},
-					//email: {
-					//	required: true,
-					//	maxlength: 50,
-					//	email: true
-					//}
+					valor: {
+						required: true
+					},
+					comprovante: {
+						required: true
+					}
 				},
 
 				submitHandler: function (form) {
 					if ($.active) {
 						return;
 					}
+
+					Notification.wait();
+
 					$.ajax({
 						url: "<%- root %>/api/venda/criar",
 						method: "POST",
@@ -178,18 +187,20 @@
 						processData: false,
 
 						success: function (dadosDeRetorno) {
+							Notification.hide();
 							form.reset();
-							alert("Ingresso(s) criado(s) com sucesso!");
+							Swal.fire("Sucesso!", "Ingresso(s) criado(s) com sucesso! " + emoji.happy, "success");
 						},
 
 						error: function (xhr) {
+							Notification.hide();
 							try {
 								// Tentar converter a resposta em um JSON
-								alert(JSON.parse(xhr.responseText));
+								Swal.fire("Erro!", JSON.parse(xhr.responseText), "error");
 							} catch (excecao) {
 								// Se não foi possível converter a resposta em JSON,
 								// apenas ignora e mostra a mensagem de erro padrão
-								alert("Algo deu errado :(");
+								Swal.fire("Erro!", "Algo deu errado " + emoji.sad, "error");
 							}
 						}
 					});

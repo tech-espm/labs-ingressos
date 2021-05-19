@@ -91,6 +91,22 @@ img {
 	text-align: left;
 }
 
+.margin-superior {
+	margin-top: 15px;
+}
+
+.margin-inferior {
+	margin-bottom: 15px;
+}
+
+.padding-superior {
+	padding-top: 15px;
+}
+
+.padding-inferior {
+	padding-bottom: 15px;
+}
+
 a.alternativo {
 	color: #fff;
 }
@@ -118,6 +134,7 @@ a.alternativo:hover {
 	left: 2.5%;
 	top: 0;
 	right: 2.5%;
+	text-align: center;
 	z-index: 10000; /* Bootstrap goes up to 1100 */
 	opacity: 0;
 	-webkit-transition: all ease-in-out .2s;
@@ -172,4 +189,8 @@ a.alternativo:hover {
 	margin: 30px 10px;
 	overflow: hidden;
 	background-color: #e5e5e5;
+}
+
+.btn, .btn:hover, .btn:active, .btn:active:hover, .btn:active:focus, .btn:focus {
+	outline: 0 none transparent;
 }

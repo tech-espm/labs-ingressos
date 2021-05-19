@@ -1,3 +1,4 @@
+<div class="padding-inferior">
 <form class="panel panel-default limitador-400" id="form">
 	<div class="panel-heading">
 		<h1>Meu perfil</h1>
@@ -30,13 +31,13 @@
 
 		<hr />
 
-		<div class="form-group">
+		<div class="form-group hidden">
 			<label for="imagemPerfil">Nova Imagem de Perfil <small>(Até 1 MiB, de preferência quadrada)</small></label>
 			<input id="imagemPerfil" name="imagemPerfil" class="form-control" type="file" accept="image/jpeg" />
 		</div>
 
-		<hr />
-		<!-- <div class="divider-body"></div> -->
+		<!-- <hr />
+		<div class="divider-body"></div> -->
 
 		<p>Para alterar a senha atual, preencha todos os campos abaixo</p>
 		<div class="form-group">
@@ -57,6 +58,7 @@
 		<button type="submit" class="btn btn-primary btn-lg">Confirmar</button>
 	</div>
 </form>
+</div>
 
 <%- contentFor("scripts") %>
 <script type="text/javascript">
@@ -122,7 +124,8 @@
 
 			erroImagem = function (erro) {
 				ajustandoImagem = false;
-				Notification.error("Ocorreu um erro durante o processamento da imagem " + emoji.sad, true);
+				Notification.hide();
+				Swal.fire("Erro!", "Ocorreu um erro durante o processamento da imagem " + emoji.sad, "error");
 			};
 
 			ultimoPasso = function (imagem) {
@@ -137,10 +140,11 @@
 				};
 
 				JsonWebApi.post("<%- root %>/api/usuario/alterarPerfil", obj, function (response) {
+					Notification.hide();
 					if (response.success)
-						Notification.success("Perfil alterado com sucesso! " + emoji.happy);
+						Swal.fire("Sucesso!", "Perfil alterado com sucesso " + emoji.happy, "success");
 					else
-						Notification.error(response.value, true);
+						Swal.fire("Erro!", response.value, "error");
 				});
 			};
 

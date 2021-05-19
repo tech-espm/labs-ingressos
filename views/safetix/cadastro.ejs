@@ -98,12 +98,16 @@
 			if (JsonWebApi.active)
 				return;
 
+			Notification.wait();
+
 			JsonWebApi.postFormData("<%- root %>/api/usuario/criar", form, function (response) {
+				Notification.hide();
 				if (response.success) {
-					alert("Usuário criado com sucesso! " + emoji.happy);
-					location.href = "<%- root %>/login";
+					Swal.fire("Sucesso!", "Usuário criado com sucesso! " + emoji.happy, "success").then(function () {
+						location.href = "<%- root %>/login";
+					});
 				} else {
-					alert(response.value, true);
+					Swal.fire("Erro!", response.value, "error");
 				}
 			});
 		}

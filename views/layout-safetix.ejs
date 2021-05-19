@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&amp;display=swap" />
 		<link rel="stylesheet" href="<%- root %>/lib/bootstrap-custom/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="<%- root %>/lib/font-awesome/css/font-awesome-1.0.2.min.css" />
+		<link rel="stylesheet" href="<%- root %>/lib/sweetalert2/css/sweetalert2.min.css" />
 		<link rel="stylesheet" href="<%- root %>/css/style-safetix-1.0.0.css" />
 
 		<script type="text/javascript" src="<%- root %>/lib/jquery/js/jquery-1.0.1.min.js"></script>
@@ -13,6 +14,16 @@
 		<script type="text/javascript" src="<%- root %>/lib/jquery-mask/js/jquery-mask-1.0.0.min.js"></script>
 		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/jquery-validate-1.0.3.min.js"></script>
 		<script type="text/javascript" src="<%- root %>/lib/jquery-validate/js/messages_pt_BR.min.js"></script>
+		<script type="text/javascript" src="<%- root %>/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+		<script type="text/javascript">
+			Swal = Swal.mixin({
+				customClass: {
+					confirmButton: "btn btn-primary",
+					cancelButton: "btn btn-primary"
+				},
+				buttonsStyling: false
+			});
+		</script>
 		<script type="text/javascript" src="<%- root %>/js/main-1.0.10.js"></script>
 		<script type="text/javascript">
 			//<![CDATA[
@@ -40,7 +51,6 @@
 				<div class="collapse navbar-collapse" id="navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li><a href="<%- root %>/quemsomos">quem somos</a></li>
-						<li><a href="#">como funcionamos</a></li>
 						<li><a href="<%- root %>/ajuda">ajuda</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
