@@ -41,8 +41,8 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<div class="form-group">
-						<label for="quantidade">Quantidade</label>
-						<input id="quantidade" name="quantidade" class="form-control" type="number" onkeyup="atualizarRecebe()" min="1" max="999" onchange="atualizarRecebe()" />
+						<label for="ingressosdisponiveis">Quantidade</label>
+						<input id="ingressosdisponiveis" name="ingressosdisponiveis" class="form-control" type="number" onkeyup="atualizarRecebe()" min="1" max="999" onchange="atualizarRecebe()" />
 					</div>
 				</div>
 
@@ -147,7 +147,7 @@
 	<%- contentFor("scripts") %>
 		<script type="text/javascript">
 			function atualizarRecebe() {
-				var qtd = parseInt($("#quantidade").val());
+				var qtd = parseInt($("#ingressosdisponiveis").val());
 				var valor = parseFloat($("#valor").val().replace(",", "."));
 				var total = 0;
 				if (!isNaN(qtd) && qtd > 0 && !isNaN(valor) && valor > 0) {
@@ -158,7 +158,7 @@
 			$("form").validate({
 				rules: {
 					// Para quase tudo existem duas, três ou mais formas de fazer a mesma coisa...! :)
-					quantidade: {
+					ingressosdisponiveis: {
 						required: true,
 						number: true,
 						min: 1,

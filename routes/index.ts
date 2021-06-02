@@ -1,6 +1,7 @@
 ﻿import app = require("teem");
 import Usuario = require("../models/usuario");
 import Evento = require("../models/evento");
+import Venda = require("../models/venda");
 
 class IndexRoute {
 	public async index(req: app.Request, res: app.Response) {
@@ -144,7 +145,8 @@ class IndexRoute {
 		res.render("safetix/ingressos", {
 			layout: "layout-safetix",
 			evento: evento,
-			usuario: u
+			usuario: u,
+			vendas: await Venda.listarDeEvento(evento.id)
 		});
 	}
 

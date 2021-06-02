@@ -7,7 +7,7 @@ class Venda {
 	public idusuario: number;
 	public idtipo: number;
 	public idsetor: number;
-	public quantidade: number;
+	public ingressosdisponiveis: number;
 	public valor: number;
 	public data: string;
 
@@ -31,8 +31,8 @@ class Venda {
 		if (isNaN(v.idsetor))
 			return "Setor inválido";
 
-		v.quantidade = parseInt(v.quantidade as any);
-		if (isNaN(v.quantidade) || v.quantidade <= 0)
+		v.ingressosdisponiveis = parseInt(v.ingressosdisponiveis as any);
+		if (isNaN(v.ingressosdisponiveis) || v.ingressosdisponiveis <= 0)
 			return "Quantidade inválida";
 
 		v.valor = parseFloat(v.valor.toString().replace(",", "."));
@@ -54,12 +54,12 @@ class Venda {
 			try {
 				await sql.beginTransaction();
 
-				await sql.query("insert into ingresso_venda (idevento, idusuario, idtipo, idsetor, data) values (?, ?, ?, ?, now())", [v.idevento, v.idusuario, v.idtipo, v.idsetor]);
+				await sql.query("insert into ingresso_venda (idevento, idusuario, idtipo, idsetor, ingressosdisponiveis, valor, data) values (?, ?, ?, ?, ?, ?, now())", [v.idevento, v.idusuario, v.idtipo, v.idsetor, v.ingressosdisponiveis, v.valor]);
 
 				v.id = await sql.scalar("select last_insert_id()");
 
-				for (let i = v.quantidade - 1; i >= 0; i--)
-					await sql.query("insert into ingresso (idevento, idpedido, idvenda, valor, emailenviado, emailrecebido) values (?, 0, ?, ?, 0, 0)", [v.idevento, v.id, v.valor]);
+				for (let i = v.ingressosdisponiveis - 1; i >= 0; i--)
+					await sql.query("insert into ingresso (idevento, idpedido, idvenda, emailenviado, emailrecebido) values (?, 0, ?, 0, 0)", [v.idevento, v.id]);
 
 				await app.fileSystem.saveUploadedFileToNewFile("public/imagens/ingresso/" + v.id + ".jpg", comprovante);
 
@@ -115,11 +115,15 @@ class Venda {
 		let lista: Venda[] = null;
 
 		await app.sql.connect(async (sql: app.Sql) => {
-            lista = (await sql.query("public id, idevento, idusuario, idtipo, idsetor, quantidade, valor, data, nome from ingresso_venda inner join usuario on ingresso_venda.idusuario = usuario.id, where idevento = ?", [idevento])) as Venda[];
+            lista = (await sql.query("select v.id, v.idtipo, t.nome tipo, v.idsetor, s.nome setor, v.valor, v.ingressosdisponiveis, date_format(v.data, '%d/%m/%Y') data from ingresso_venda v inner join ingresso_setor s on s.id = v.idsetor inner join ingresso_tipo t on t.id = v.idtipo where v.idevento = ? and v.ingressosdisponiveis > 0", [idevento])) as Venda[];
 		});
 
 		return lista || [];
     }
+
+	public static async atualizarIngressosDisponiveis(sql: app.Sql, id: number): Promise<void> {
+		await sql.query("update ingresso_venda set ingressosdisponiveis = (select count(*) from ingresso where idvenda = ? and idpedido = 0) where id = ?", [id, id]);
+	}
 };
 
 export = Venda;

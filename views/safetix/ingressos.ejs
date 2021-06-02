@@ -20,18 +20,17 @@
 	</div>
 
 	<button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
-<% for( let i = 0; i < venda.length; venda++ ) { %>
+<% for (let i = 0; i < vendas.length; i++) { %>
 
 		<div class="ingresso">
 			<div class="informacao-esquerda">
-				<h6 class="cor-preto">Vendedor: venda[i].nome</h6>
-				<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">venda[i].setor</h4>
-				<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">venda[i].tipo</h5>
-				<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado: venda[i].data </h6>
+				<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold"><%= vendas[i].setor %></h4>
+				<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold"><%= vendas[i].tipo %></h5>
+				<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado: <%= vendas[i].data %></h6>
 			</div>
 			<div class="informacao-direita">
-				<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">venda[i].valor</h4>
-				<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">venda[i].quantidade</h6>
+				<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold"><%= vendas[i].valor %></h4>
+				<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px"><%= vendas[i].ingressosdisponiveis %></h6>
 				<div class="compraHr">
 					<hr>
 					<p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
