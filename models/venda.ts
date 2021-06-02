@@ -110,6 +110,16 @@ class Venda {
 
 		return erro;
 	}
+
+	public static async listarDeEvento(idevento: number): Promise<Venda[]> {
+		let lista: Venda[] = null;
+
+		await app.sql.connect(async (sql: app.Sql) => {
+            lista = (await sql.query("public id, idevento, idusuario, idtipo, idsetor, quantidade, valor, data, nome from ingresso_venda inner join usuario on ingresso_venda.idusuario = usuario.id, where idevento = ?", [idevento])) as Venda[];
+		});
+
+		return lista || [];
+    }
 };
 
 export = Venda;

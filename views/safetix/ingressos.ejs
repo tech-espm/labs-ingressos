@@ -1,108 +1,44 @@
 <div class="limitador">
-	<header class="imagem-fundo" style="background-image: url('<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg');"></header>
+	<header class="imagem-fundo"
+		style="background-image: url('<%- staticRoot %>/imagens/evento/<%= evento.id %>.jpg');"></header>
 
 	<div class="fundo-horario">
-        <div class="row">
-            <div class="col-xs-10">
-                <h3 class="cor-branco"><%= evento.datainicial %> às <%= evento.horario %> até <%= evento.datafinal %> às <%= evento.horario %></h3>
-                <h3 class="cor-branco"><%= evento.nome %></h3>
-            </div>
-            <div class="col-xs-2 text-right">
-                <a class="cor-branco" href="#" data-toggle="modal" data-target="#modalComprar">Ver +</a>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col-xs-10">
+				<h3 class="cor-branco">
+					<%= evento.datainicial %> às <%= evento.horario %> até <%= evento.datafinal %> às <%= evento.horario
+									%>
+				</h3>
+				<h3 class="cor-branco">
+					<%= evento.nome %>
+				</h3>
+			</div>
+			<div class="col-xs-2 text-right">
+				<a class="cor-branco" href="#" data-toggle="modal" data-target="#modalComprar">Ver +</a>
+			</div>
+		</div>
 	</div>
 
 	<button type="submit" class="btn btn-primary btn-lg">Filtrar</button>
+<% for( let i = 0; i < venda.length; venda++ ) { %>
 
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
+		<div class="ingresso">
+			<div class="informacao-esquerda">
+				<h6 class="cor-preto">Vendedor: venda[i].nome</h6>
+				<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">venda[i].setor</h4>
+				<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">venda[i].tipo</h5>
+				<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado: venda[i].data </h6>
+			</div>
+			<div class="informacao-direita">
+				<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">venda[i].valor</h4>
+				<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">venda[i].quantidade</h6>
+				<div class="compraHr">
+					<hr>
+					<p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
-			</div>		
-	</div>
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
-			</div>		
-	</div>
-
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
-			</div>	
-	</div>
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
-			</div>
-		</div>
-	</div>
-	<div class="ingresso">
-		<div class="informacao-esquerda">
-			<h6 class="cor-preto">Vendedor: José</h6>
-			<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-			<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-			<h6 class="cor-detalhe" style="margin-top: -20px">Anunciado há 3 dias</h6>
-		</div>
-		<div class="informacao-direita">
-			<h4 style="padding-left: 10px; padding-top: 15px; font-weight: bold">R$ 100,00</h4>
-			<h6 class="cor-detalhe" style="margin-top: -15px; padding-left: 5px">12 ingressos disponiveis</h6>
-			<div class="compraHr">
-				<hr><p><a data-toggle="modal" data-target="#modalComprar2">comprar</a></p>
-			</div>
-		</div>
-	</div>
+	<% } %>
 </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="modalComprar">
@@ -119,13 +55,14 @@
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 					Suspendisse erat nulla, mattis et maximus in, molestie at felis.
 					Praesent lectus magna, porta a volutpat ac, egestas a dui.
-					Quisque semper, ex eget pretium faucibus, ante ipsum dictum nisl, sed iaculis ante nisi vehicula arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+					Quisque semper, ex eget pretium faucibus, ante ipsum dictum nisl, sed iaculis ante nisi vehicula
+					arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 					Suspendisse erat nulla, mattis et maximus in, molestie at felis.
-					</p>
+				</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-				
+
 			</div>
 		</div>
 	</div>
@@ -142,77 +79,87 @@
 			</div>
 			<div class="modal-body">
 
-						<h6 class="cor-preto">Vendedor: José</h6>
-						<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
-						<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
-						<h6 class="cor-detalhe" style="margin-top: -20px">atenção: é necessário apresentar carteirinha de aluno ESPM-SP para entrada na festa com esse ingresso.
-						</h6>
-					
-						<h4 style="padding-left: 10px; padding-top: 0px; font-weight: bold">R$ 100,00</h4>
-						<h4 class="cor-detalhe" > <a style="margin-right:5px;" href="#">+</a>2<a style="margin-left:5px;" href="#">-</a></h4>
+				<h6 class="cor-preto">Vendedor: José</h6>
+				<h4 class="cor-preto" style="margin-top: -20px; font-weight: bold">Pista</h4>
+				<h5 class="cor-preto" style="margin-top: -20px; font-weight: bold">Aluno</h5>
+				<h6 class="cor-detalhe" style="margin-top: -20px">atenção: é necessário apresentar carteirinha de aluno
+					ESPM-SP para entrada na festa com esse ingresso.
+				</h6>
+
+				<h4 style="padding-left: 10px; padding-top: 0px; font-weight: bold">R$ 100,00</h4>
+				<h4 class="cor-detalhe"> <a style="margin-right:5px;" href="#">+</a>2<a style="margin-left:5px;"
+						href="#">-</a></h4>
 
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button type="button" class="btn btn-primary"> <a style="color:white" href="<%- root %>/carrinho">Comprar!</a></button>
+				<button type="button" class="btn btn-primary"> <a style="color:white"
+						href="<%- root %>/carrinho">Comprar!</a></button>
 			</div>
 		</div>
 	</div>
 </div>
 
 <%- contentFor("styles") %>
-<style type="text/css">
-	.imagem-fundo {
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center;
-		text-align: center;
-		padding: 150px 0px;
-		margin-bottom: 30px;
-	}
-	.fundo-horario {
-		border-radius: 100px;
-		padding: 15px 30px;
-		margin: 30px 0px;
-		background-color: rgba(255, 9, 73, 0.6);
-	}
-	.fundo-horario h3 {
-		margin: 0px;
-	}
-	.informacao-esquerda, .informacao-direita {
-		background-color: #fff;
-		height: 120px;
-		float: left;
-		margin-top: 20px;
-	}
-	.informacao-esquerda {
-		width: 160px;
-		border-radius: 10px 0px 0px 10px;
-		padding-left: 20px;
-		padding-top: 5px;
-	}
-	.informacao-direita {
-		width: 150px;
-		margin-right: 20px;
-		border-radius: 0px 10px 10px 0px;
-	}
-	.cor-branco{
-		color: #fff;
-	}
+	<style type="text/css">
+		.imagem-fundo {
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			text-align: center;
+			padding: 150px 0px;
+			margin-bottom: 30px;
+		}
 
-	.compraHr{
-		
-		display: flex;
-		align-items: center;
-	}
+		.fundo-horario {
+			border-radius: 100px;
+			padding: 15px 30px;
+			margin: 30px 0px;
+			background-color: rgba(255, 9, 73, 0.6);
+		}
 
-	.compraHr hr{
+		.fundo-horario h3 {
+			margin: 0px;
+		}
 
-		flex:1;
-		border-color:#ff0949;
-		margin-right: 5%;
-		margin-top: 10%;
-		
+		.informacao-esquerda,
+		.informacao-direita {
+			background-color: #fff;
+			height: 120px;
+			float: left;
+			margin-top: 20px;
+		}
 
-	}
-</style>
+		.informacao-esquerda {
+			width: 160px;
+			border-radius: 10px 0px 0px 10px;
+			padding-left: 20px;
+			padding-top: 5px;
+		}
+
+		.informacao-direita {
+			width: 150px;
+			margin-right: 20px;
+			border-radius: 0px 10px 10px 0px;
+		}
+
+		.cor-branco {
+			color: #fff;
+		}
+
+		.compraHr {
+
+			display: flex;
+			align-items: center;
+		}
+
+		.compraHr hr {
+
+			flex: 1;
+			border-color: #ff0949;
+			margin-right: 5%;
+			margin-top: 10%;
+
+
+		}
+	</style>

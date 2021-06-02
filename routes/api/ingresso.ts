@@ -5,10 +5,10 @@ import Usuario = require("../../models/usuario");
 class IngressoApiRoute {
     @app.route.methodName("/listarDeEvento/:idevento")
     public async listarDeEvento(req: app.Request, res: app.Response) {
-        // @@@ ajustar
-        //let lista = await Ingresso.listarDeEvento(parseInt(req.params["idevento"]));
+    
+        let lista = await Ingresso.listarDeEvento(parseInt(req.params["idevento"]));
 
-        //res.json(lista);
+        res.json(lista);
         res.sendStatus(204);
     }
 
