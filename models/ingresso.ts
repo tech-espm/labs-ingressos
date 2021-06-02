@@ -40,6 +40,17 @@ class Ingresso {
 
 		return erro;
 	}
+
+	public static async listarDeEvento(idevento: number): Promise<Ingresso[]> {
+		let lista: Ingresso[] = null;
+
+		await app.sql.connect(async (sql: app.Sql) => {
+            lista = (await sql.query("select id, idevento, idpedido, idvenda, valor, emailenviado, emailrecebido from ingresso where idevento = ?", [idevento])) as Ingresso[];
+		});
+
+		return lista || [];
+    }
+
 };
 
 export = Ingresso;

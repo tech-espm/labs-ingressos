@@ -3,6 +3,16 @@ import Usuario = require("../../models/usuario");
 import Venda = require("../../models/venda");
 
 class VendaApiRoute {
+
+    @app.route.methodName("/listarDeEvento/:idevento")
+    public async listarDeVenda(req: app.Request, res: app.Response) {
+    
+        let lista = await Venda.listarDeEvento(parseInt(req.params["idevento"]));
+
+        res.json(lista);
+        res.sendStatus(204);
+    }
+
     @app.http.post()
     @app.route.formData()
     public async criar(req: app.Request, res: app.Response) {
